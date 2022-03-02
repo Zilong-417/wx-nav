@@ -1,0 +1,30 @@
+<view class="container">
+<image src="../../images/overcast.jpeg" ></image>
+        <view class="wea-thead">
+            <view class="we-name">{{cityName?cityName:'城市'}}</view>
+            <view class="we-regime">{{weatherInfo.text?weatherInfo.text:'-'}}</view>
+            <view class="we-temperature">{{weatherInfo.temp?weatherInfo.temp:'-'}}℃</view>
+        </view>
+        <view class="wea-today">
+            <view class="today-info">
+                <view class="fo-left">
+                    <label class="week">{{weekday}}</label>
+                    <label class="tian">今天</label>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view class="wea-describe">
+        <swiper class="life-swiper" vertical="true" autoplay="true" circular="true" interval="5000" wx:if="{{lifestyleList.length>0}}">
+            <block wx:for='{{lifestyleList}}' wx:for-item='v' wx:key='k'>
+                <swiper-item class='li-item'>
+                    <label class="ti">{{v.name}}：</label>
+                    <label class="td">{{v.text}}</label>
+                </swiper-item>
+            </block>
+        </swiper>
+    </view>
+<image class="pos-btn" src="../../images/position.png" bindtap="bindAutoUserLocation" wx:if="{{!isCancle}}"></image>
+<image class="pos-btn" src="../../images/position.png" bindtap="bindGetUserLocation" wx:if="{{isCancle}}"></image>
+
+
