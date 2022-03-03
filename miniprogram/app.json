@@ -1,9 +1,9 @@
 {
   "pages": [
-    "pages/trip/trip",
-    "pages/my/my",
-    "pages/weather/weather",
-    "pages/index/index"
+    // "pages/trip/trip",
+    // "pages/my/my",
+    // "pages/weather/weather",
+    // "pages/index/index"
     
   ],
   "window": {
