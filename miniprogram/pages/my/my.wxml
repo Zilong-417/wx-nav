@@ -1,0 +1,23 @@
+<!--pages/my/my.wxml-->
+<view class="info_box">
+    <view class="top_nav">
+        <image src="../../images/back.png" class="img1"></image>
+        <image src="../../images/updata.png" class="img2"></image>
+    </view>
+    <view class="touxiang_box">
+        <image src="../../images/touxiang.png" class="touxiang"></image>
+        <view class="name_box">
+            <text>我是老人</text>
+        </view>
+    </view>
+</view>
+<view class="nav">
+    <view class="nav_left">
+    <image src="../../images/help_my.png"></image>
+    <text>帮助</text>
+    </view>
+    <view class="nav_right">
+    <image src="../../images/phone.png"></image>
+    <text>求救</text>
+    </view>
+</view>

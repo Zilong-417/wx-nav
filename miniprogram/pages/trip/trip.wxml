@@ -1,0 +1,21 @@
+<!--pages/trip/trip.wxml-->
+<view class="trip_tip">
+    <text>附近站点</text>
+</view>
+<view class="map">
+    <map id="myMap" style="width:90%;height:700rpx;">
+    </map>
+</view>
+<view class="search_nav">
+    <text>广东东软学院</text>
+    <view class="search_box">
+        <input type="text" placeholder="请输入目的地"/>
+    </view>
+</view>
+<view class="sub">
+    <button class="sub_btn" style="background-color: red;margin-right: 6%;">清空</button>
+    <button class="sub_btn">前往</button>
+</view>
+<view class="bottom_nav">
+
+</view>
