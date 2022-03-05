@@ -1,62 +1,204 @@
 /* pages/trip/trip.wxss */
 /*顶端提示*/
-page{
-    background-color: 	#F5FFFA;
+page {
+    background-color: 	#F5F5F5;
 }
-.trip_tip{
+
+.trip_tip {
     width: 100%;
-    height: 50px;
+    height: 5%;
     background-color: white;
 }
-.trip_tip text{
+
+.trip_tip text {
     font-size: large;
     color: black;
     font-weight: 600;
     line-height: 50px;
-    margin-left: 10px;
+    margin-left: 20px;
 }
+
 /*地图*/
-.map{
-    border-radius:150px ;
-}
-#myMap{
-    margin-left: 5%;
-    border-radius:15rpx ;
-}
-/*搜索栏*/
-.search_nav{
+.map {
     position: relative;
     width: 90%;
-    height: 100px;
-    background-color: yellow;
-    margin-left: 5%;
+    height: 900rpx;
+    border-radius: 40rpx;
+    border: 2px solid #CCDDFF;
+    margin: 0 auto;
+    overflow: hidden;
+    transform: translateY(0);
 }
-.search_nav text{
+#myMap {
+    width:100%;height:100%;
+}
+/*放大与缩小*/
+.enlarge{
     position: absolute;
-    left: 5%;
+    top: 0;
+    right: 0;
+    width: 15%;
+    height: 10%;
+    z-index: 10;
+}
+.enlarge image{
+    width: 100%;
+    height: 100%;
+}
+/*搜索栏*/
+.search_nav {
+    position: absolute;
+    display: block;
+    bottom: 0;
+    width: 100%;
+    height: 110px;
+    border-radius: 15rpx;
+    background-color: white;
+}
+.search_nav_chage{
+    position: absolute;
+    display: none;
+    bottom: 0;
+    width: 100%;
+    height: 110px;
+    border-radius: 15rpx;
+    background-color: white;
+}
+.from_box image{
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    left: 2%;
+    top: 10%;
+}
+.search_nav text {
+    position: absolute;
+    left: 12%;
     top: 10%;
     font-size: large;
 }
-.search_nav .search_box{
+.search_nav .search_box image{
     position: absolute;
-    left: 5%;
-    top: 35%;
-    width: 90%;
-    height: 50px;
-    font-size: larger;
-    padding: 5%;
-    background-color: #ccc;
+    width: 25px;
+    height: 25px;
+    left: 1%;
+    top: 20%;
 }
+.search_nav .search_box {
+    position: absolute;
+    left: 2%;
+    top: 30%;
+    width: 78%;
+    height: 30px;
+    font-size: larger;
+    padding:10px 30px;
+    border-radius: 15rpx;
+    border: 1px solid	#DCDCDC;
+    background-color:	#F5F5F5;
+    margin-top: 10px;
+}
+
 /*提交与清空*/
-.sub{
+.sub {
     width: 90%;
-    height: 120px;
+    height: 90px;
     margin-left: 5%;
     margin-top: 5%;
+    font-size: large;
+    color: white;
 }
-.sub .sub_btn{
+
+.sub .sub_btn {
     float: left;
     width: 47%;
-    background-color: yellowgreen;
+    background-color: #32CD32;
 }
+
 /*底部栏*/
+.voice_box {
+    width: 100%;
+    height: 250rpx;
+    border-top: 1px solid #ccc;
+    position: relative;
+    background-color: white;
+}
+.record,
+.dot {
+    height: 200rpx;
+    width: 200rpx;
+    border-radius: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -20px;
+    transform: translate(-50%, -50%);
+    animation-iteration-count: 1;
+}
+
+.record {
+    background: #7bbfea;
+    z-index: 10;
+}
+.voice_box .record_img1{
+    position: absolute;
+    top: 25%;
+    right: 10%;
+    height: 100rpx;
+    width: 100rpx;
+}
+.voice_box .record_img2{
+    position: absolute;
+    top: 25%;
+    left: 10%;
+    height: 100rpx;
+    width: 100rpx;
+}
+.dot {
+    background: #7bbfea;
+    z-index: 9;
+}
+
+.dot-blowup {
+    animation: sploosh2 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    animation-fill-mode: forwards;
+}
+
+.dot-zoomout {
+    animation: sploosh3 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    animation-fill-mode: forwards;
+}
+
+@keyframes sploosh2 {
+    0% {
+        box-shadow: 0 0 0 0px#7bbfea;
+        background: #7bbfea;
+    }
+
+    100% {
+        box-shadow: 0 0 0 15px	#AFEEEE;
+        background: 	#AFEEEE;
+    }
+}
+
+@keyframes sploosh3 {
+    0% {
+        box-shadow: 0 0 0 15px 	#AFEEEE;
+        background: 	#AFEEEE;
+    }
+
+    100% {
+        box-shadow: 0 0 0 0px 	#AFEEEE;
+        background: 	#AFEEEE;
+    }
+}
+
+.record image {
+    height: 90rpx;
+    width: 90rpx;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 10;
+    background: transparent;
+    transform: translate(-50%, -50%);
+}

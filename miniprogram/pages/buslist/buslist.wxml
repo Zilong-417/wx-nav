@@ -1,0 +1,20 @@
+<!--pages/buslist/buslist.wxml-->
+<view class="nav">
+</view>
+<view class="content">
+    <view class="stop_item">
+        <view class="stop_item_top">
+            <view class="stop_name">广东东软学院</view>
+            <view class="goaddress">8元</view>
+        </view>
+        <view class="stop_item_bottom">
+            <view class="stop_item_bottom1"></view>
+            <view class="stop_item_bottom2">
+                <text>步行：30米</text>
+                <text>耗时：340分钟</text>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="bottom">
+</view>

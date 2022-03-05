@@ -2,20 +2,38 @@
 <view class="trip_tip">
     <text>附近站点</text>
 </view>
+<!--地图-->
 <view class="map">
-    <map id="myMap" style="width:90%;height:700rpx;">
+    <!--放大与缩小-->
+    <view class="enlarge" catchtap="big">
+        <image src="{{isbig==true?'../../images/big.png':'../../images/small.png'}}" ></image>
+    </view>
+    <map id="myMap" markers="{{markers}}" scale="16" show-compass="true" enable-rotate="true" enable-building="true" layer-style="1" latitude="{{ markers[0].latitude}}" longitude="{{ markers[0].longitude}}">
+        <!--起点与终点-->
+        <view class="search_nav">
+            <view class="from_box">
+                <image src="../../images/from.png"></image>
+                <text>{{markers[0].address}}</text>
+            </view>
+            <view class="search_box">
+                <image src="../../images/to.png"></image>
+                <input type="text" placeholder="请输入目的地" value="{{addtext}}" bindinput="getgoods" />
+            </view>
+        </view>
     </map>
 </view>
-<view class="search_nav">
-    <text>广东东软学院</text>
-    <view class="search_box">
-        <input type="text" placeholder="请输入目的地"/>
-    </view>
-</view>
+<!--清空与提交-->
 <view class="sub">
-    <button class="sub_btn" style="background-color: red;margin-right: 6%;">清空</button>
-    <button class="sub_btn">前往</button>
+    <button class="sub_btn" bindtap="goaddress">前往</button>
+    <button class="sub_btn" style="background-color:red;margin-left: 6%;" bindtap="reset">清空</button>
 </view>
-<view class="bottom_nav">
-
+<!--语音识别-->
+<view class="voice_box">
+    <image src="../../images/scan.png" class="record_img1"></image>
+    <image src="../../images/back_index.png" class="record_img2"></image>
+    <progress strokeWidth="4" percent="{{value}}" wx:if="{{showPg}}"></progress>
+    <view class="dot {{isTouchStart==true?'dot-blowup':''}} {{isTouchEnd==true?'dot-zoomout':''}}" style="display:{{isDot}}"></view>
+    <view class="record" bindtouchstart="recordStart" bindtouchend="recordTerm">
+        <image mode="widthFix" src="../../images/voice.png"></image>
+    </view>
 </view>

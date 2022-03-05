@@ -1,0 +1,48 @@
+/* pages/buslist/buslist.wxss */
+/*公交*/
+.content .stop_item{
+    width: 95%;
+    height: 150px;
+    margin: 0 auto;
+    border-radius: 20px;
+    margin-top: 10px;
+    border: 1px solid 	#7744FF;
+    background-color: 	#E0FFFF;
+    overflow: hidden;
+}
+.stop_item_top{
+    height: 55px;
+    border-bottom: 1px solid #7744FF;
+    background-color: white;
+}
+.stop_item_top .stop_name{
+    width: 75%;
+    height: 100%;
+    float: left;
+    padding-left: 5%;
+    font-size: larger;
+    color: white;
+    font-weight:1000;
+    line-height: 55px;
+    background-color: #7bbfea;
+}
+.goaddress{
+    float: right;
+    width: 20%;
+    height: 100%;
+    font-size: larger;
+    color: white;
+    font-weight:1000;
+    text-align: center;
+    line-height: 55px;
+    background-color:red;
+}
+.stop_item_bottom1{
+    width: 100%;
+    height: 50px;
+    background-color: violet;
+}
+.stop_item_bottom2 text{
+    font-size: large;
+    font-weight: 600;
+}

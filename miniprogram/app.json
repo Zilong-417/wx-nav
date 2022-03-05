@@ -1,24 +1,37 @@
 {
   "pages": [
-    // "pages/trip/trip",
-    // "pages/my/my",
-    // "pages/weather/weather",
-    // "pages/index/index"
     
+    "pages/trip/trip",
+    
+    "pages/buslist/buslist",
+    "pages/my/my",
+    "pages/weather/weather",
+    "pages/index/index"
+
   ],
   "window": {
-    "backgroundColor": "#F6F6F6",
+    "backgroundColor": "#7bbfea",
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "孤寡老人生活助手",
+    "navigationBarBackgroundColor": "#7bbfea",
+    "navigationBarTitleText": "空巢老人生活助手",
     "navigationBarTextStyle": "black"
   },
-    "permission": {
-      "scope.userLocation": {
-        "desc": "你的位置信息将用于小程序定位"
-      }
-    },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序定位"
+    }
+  },
   "sitemapLocation": "sitemap.json",
   "style": "v2",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "plugins": {
+    "routePlan": {
+      "version": "1.0.18",
+      "provider": "wx50b5593e81dd937a"
+    },
+    "QCloudAIVoice": {
+      "version": "1.2.4",
+      "provider": "wx3e17776051baf153"
+  }
+  }
 }
