@@ -1,0 +1,41 @@
+<!--pages/walk/walk.wxml-->
+<!--前往站牌界面-->
+<view class="top">
+    <view class="top_content">
+        正在前往<text style="color: red;">{{stop_name}}</text>
+    </view>
+</view>
+<view class="map_box">
+    <map id="map" markers="{{markers}}" scale="{{scale_change==true?20:17}}" show-compass="true" show-location="true" enable-rotate="true" enable-building="true" layer-style="1" latitude="{{ markers[0].latitude}}" longitude="{{ markers[0].longitude}}" polyline="{{polyline}}">
+        <!--路线报点-->
+        <view class="road">
+            <view class="sound">
+                <image src="../../images/nomute.png"></image>
+            </view>
+            <view class="content">
+                <text>{{show_nowaction}}</text>
+            </view>
+        </view>
+        <!--地图放大与缩小-->
+        <view class="big_small_box">
+            <view class="big" bindtap="big">+</view>
+            <view class="small" bindtap="small">-</view>
+        </view>
+        <!--底部路线详情-->
+        <view class="navigation_box" bindtap="navigation_show">
+            <view class="larger">
+                <image src="{{road_detail==true?'../../images/larger.png':'../../images/shouhui.png'}}"></image>
+                <text>{{road_detail==true?'展开查看路线详情':'收起路线详情'}}</text>
+            </view>
+        </view>
+        <!--路线详情具体内容-->
+        <view class="road_detail {{road_detail_change}}">
+            <block wx:for="{{steps}}" wx:for-item="item">
+                <view class="detail">
+                    <text> {{item.instruction}}</text>
+                </view>
+            </block>
+        </view>
+
+    </map>
+</view>

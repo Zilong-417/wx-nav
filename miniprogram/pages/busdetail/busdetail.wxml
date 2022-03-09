@@ -1,0 +1,66 @@
+<!--pades/busdetail/busdetail.wxml-->
+<!--头-->
+<view class="nav">
+    <view class="to_address">{{busname}}</view>
+</view>
+<!--地图-->
+<view class="map" >
+    <map class="inmap" markers="{{markers}}" scale='12' show-compass="true" show-location="true" enable-rotate="true" enable-building="true" layer-style="1" longitude="{{markers[0].longitude}}" latitude="{{markers[0].latitude}}"  polyline="{{polyline}}">
+    <view class="map_top">
+        行驶路线
+    </view>
+    </map>
+</view>
+<!--站牌-->
+<block wx:for="{{stopdetail}}" >
+    <view class="stop_detail">
+        <view class="stop_detail_left">
+            <text>{{item.busname}}</text>
+            <view class="stop_detail_left_cost">
+                <text>票价:{{item.cost}}元</text>
+                <text style="margin-left: 10px;">车程:{{item.sumtime}}小时</text>
+            </view>
+        </view>
+        <view class="stop_detail_right">
+            到站提醒
+        </view>
+    </view>
+</block>
+<!--路线-->
+<scroll-view class="rount" scroll-x="{{true}}">
+    <view class="rount_item">
+        <view class="rount_item_top" style="background-color:white;">
+            <image src="../../images/oldman.png"></image>
+        </view>
+        <view class="rount_item_top">1</view>
+        <view class="rount_item_bottom">广东东软学院</view>
+    </view>
+    <view class="rount_item">
+        <view class="rount_item_top">1</view>
+        <view class="rount_item_bottom">广东东软学院</view>
+    </view>
+    <view class="rount_item">
+        <view class="rount_item_top">1</view>
+        <view class="rount_item_bottom">广东东软学院</view>
+    </view>
+    <view class="rount_item">
+        <view class="rount_item_top">1</view>
+        <view class="rount_item_bottom">广东东软学院</view>
+    </view>
+    <view class="rount_item">
+        <view class="rount_item_top">1</view>
+        <view class="rount_item_bottom">广东东软学院</view>
+    </view>
+    <view class="rount_item">
+        <view class="rount_item_top">1</view>
+        <view class="rount_item_bottom">广东东软学院</view>
+    </view>
+    <view class="rount_item">
+        <view class="rount_item_top">1</view>
+        <view class="rount_item_bottom">广东东软学院</view>
+    </view>
+    <view class="rount_item">
+        <view class="rount_item_top">2</view>
+        <view class="rount_item_bottom">广东东软学院</view>
+    </view>
+</scroll-view>

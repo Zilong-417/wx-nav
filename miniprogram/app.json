@@ -1,8 +1,8 @@
 {
   "pages": [
-    
     "pages/trip/trip",
-    
+    "pages/busdetail/busdetail",
+    "pages/walk/walk",
     "pages/buslist/buslist",
     "pages/my/my",
     "pages/weather/weather",
@@ -26,12 +26,15 @@
   "lazyCodeLoading": "requiredComponents",
   "plugins": {
     "routePlan": {
-      "version": "1.0.18",
+      "version": "1.0.19",
       "provider": "wx50b5593e81dd937a"
     },
-    "QCloudAIVoice": {
-      "version": "1.2.4",
-      "provider": "wx3e17776051baf153"
-  }
-  }
+    "WechatSI": {
+      "version": "0.3.5",
+      "provider": "wx069ba97219f66d99"
+    }
+  },
+  "requiredBackgroundModes": [
+    "location"
+  ]
 }

@@ -3,32 +3,48 @@
     <text>附近站点</text>
 </view>
 <!--地图-->
-<view class="map">
+<view class="map {{map_change}}">
     <!--放大与缩小-->
     <view class="enlarge" catchtap="big">
-        <image src="{{isbig==true?'../../images/big.png':'../../images/small.png'}}" ></image>
+        <image src="{{isbig==true?'../../images/big.png':'../../images/small.png'}}"></image>
+        <text>{{isbig==true?'展开':'收回'}}</text>
     </view>
     <map id="myMap" markers="{{markers}}" scale="16" show-compass="true" enable-rotate="true" enable-building="true" layer-style="1" latitude="{{ markers[0].latitude}}" longitude="{{ markers[0].longitude}}">
         <!--起点与终点-->
-        <view class="search_nav">
+        <view class="search_nav {{search_nav_none}}">
             <view class="from_box">
                 <image src="../../images/from.png"></image>
-                <text>{{markers[0].address}}</text>
+                <text>{{markers[0].title}}</text>
             </view>
             <view class="search_box">
                 <image src="../../images/to.png"></image>
                 <input type="text" placeholder="请输入目的地" value="{{addtext}}" bindinput="getgoods" />
             </view>
         </view>
+        <!--站点详情-->
+            <scroll-view scroll-x="{{true}}" class="stop_detail {{stop_detail_none}}">
+                <view class="stop_detail_item" wx:for="{{markers}}" wx:for-item="item" wx:if="{{item.distance!=0+'米'}}">
+                    <view class="stop_left">
+                        <view class="stop_left1">
+                            <text class="stop_ad">{{item.title}}</text>
+                        </view>
+                        <text>距离你：</text><text style="color: red;">{{item.distance}}</text>
+                    </view>
+                    <view class="stop_right" bindtap="gostop" data-name="{{item.title}}" data-latitude="{{item.latitude}}" data-longtitude="{{item.longitude}}">
+                        <text>前往</text>
+                    </view>
+                </view>
+           
+            </scroll-view>
     </map>
 </view>
 <!--清空与提交-->
-<view class="sub">
-    <button class="sub_btn" bindtap="goaddress">前往</button>
-    <button class="sub_btn" style="background-color:red;margin-left: 6%;" bindtap="reset">清空</button>
+<view class="sub {{sub_none}}">
+    <button class="sub_btn" bindtap="goaddress" style="color: white;font-size: larger;border-radius: 15px;">前往</button>
+    <button class="sub_btn" style="background-color:red;margin-left: 6%;color: white;font-size: larger;border-radius: 15px;" bindtap="reset">清空</button>
 </view>
 <!--语音识别-->
-<view class="voice_box">
+<view class="voice_box {{voice_box_none}}">
     <image src="../../images/scan.png" class="record_img1"></image>
     <image src="../../images/back_index.png" class="record_img2"></image>
     <progress strokeWidth="4" percent="{{value}}" wx:if="{{showPg}}"></progress>

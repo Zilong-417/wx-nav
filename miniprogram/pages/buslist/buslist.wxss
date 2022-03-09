@@ -1,13 +1,37 @@
 /* pages/buslist/buslist.wxss */
+page{
+    background-color:#F0F8FF;
+}
+/*头部*/
+.nav{
+    width: 100%;
+    height: 60px;
+    background-color: #7bbfea;
+}
+.to_address{
+    width: 80%;
+    height: 40px;
+    background-color: white;
+    margin: 0 auto;
+    font-size: large;
+    font-weight: 800;
+    text-align: center;
+    line-height: 40px;
+    margin-top: 10px;
+    border-radius: 15px;
+}
+.to_address text{
+    color: red;
+}
 /*公交*/
 .content .stop_item{
-    width: 95%;
+    width: 98%;
     height: 150px;
     margin: 0 auto;
-    border-radius: 20px;
+    border-radius: 10px;
     margin-top: 10px;
     border: 1px solid 	#7744FF;
-    background-color: 	#E0FFFF;
+    background-color: white;
     overflow: hidden;
 }
 .stop_item_top{
@@ -40,9 +64,34 @@
 .stop_item_bottom1{
     width: 100%;
     height: 50px;
-    background-color: violet;
+    border-bottom: 1px solid #ccc;
+}
+.stop_item_bottom1 .by{
+    display: inline-block;
+    height: 30px;
+    color:black;
+    font-size: large;
+    font-weight: 700;
+    padding: 5px;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-left: 15px;
+}
+.stop_item_bottom1 .bybus{
+    display: inline-block;
+    height: 30px;
+    color: white;
+    font-size: large;
+    font-weight: 600;
+    padding: 5px;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-left: 5px;
+    background-color: skyblue;
 }
 .stop_item_bottom2 text{
     font-size: large;
     font-weight: 600;
+    line-height: 50px;
+    margin: 0 20px 0 15px
 }
