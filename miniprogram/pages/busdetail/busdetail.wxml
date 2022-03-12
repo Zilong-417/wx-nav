@@ -4,15 +4,19 @@
     <view class="to_address">{{busname}}</view>
 </view>
 <!--地图-->
-<view class="map" >
-    <map class="inmap" markers="{{markers}}" scale='12' show-compass="true" show-location="true" enable-rotate="true" enable-building="true" layer-style="1" longitude="{{markers[0].longitude}}" latitude="{{markers[0].latitude}}"  polyline="{{polyline}}">
-    <view class="map_top">
-        行驶路线
-    </view>
+<view class="map">
+    <map class="inmap" markers="{{markers}}" scale='12' show-compass="true" show-location="true" enable-rotate="true" enable-building="true" layer-style="1" longitude="{{markers[0].longitude}}" latitude="{{markers[0].latitude}}" polyline="{{polyline}}">
+        <view class="map_top">
+            车辆行驶路线
+        </view>
+        <view class="map_bottom" bindtap="go_busstop">
+            <image src="../../images/zhiyin.png"></image>
+            <text>前往站牌</text>
+        </view>
     </map>
 </view>
 <!--站牌-->
-<block wx:for="{{stopdetail}}" >
+<block wx:for="{{stopdetail}}" wx:key="index" wx:for-item="item">
     <view class="stop_detail">
         <view class="stop_detail_left">
             <text>{{item.busname}}</text>
@@ -21,46 +25,33 @@
                 <text style="margin-left: 10px;">车程:{{item.sumtime}}小时</text>
             </view>
         </view>
-        <view class="stop_detail_right">
-            到站提醒
+        <view class="stop_detail_right {{stop_detail_right_change}}" bindtap="end" wx:if="{{voiceup}}">
+            开启提醒
+        </view>
+        <view class="stop_detail_right " bindtap="end" wx:if="{{!voiceup}}">
+            关闭提醒
         </view>
     </view>
 </block>
 <!--路线-->
 <scroll-view class="rount" scroll-x="{{true}}">
-    <view class="rount_item">
-        <view class="rount_item_top" style="background-color:white;">
-            <image src="../../images/oldman.png"></image>
+    <block wx:for="{{viastops}}"  wk:key="index" wx:for-item="item">
+        <!--更改当前所在位置站点样式-->
+        <!-- <text style="z-index: 200;">--{{item.via_stops}}--</text> -->
+        <view class="rount_item {{rount_item_change}}"  wx:if="{{item.isthis}}">
+            <view class="rount_item_top1" >
+                <image src="../../images/oldman.png" style="display: block;"></image>
+            </view>
+            <view class="rount_item_top">{{item.index}}</view>
+            <view class="rount_item_bottom">{{item.via_stops}}</view>
         </view>
-        <view class="rount_item_top">1</view>
-        <view class="rount_item_bottom">广东东软学院</view>
-    </view>
-    <view class="rount_item">
-        <view class="rount_item_top">1</view>
-        <view class="rount_item_bottom">广东东软学院</view>
-    </view>
-    <view class="rount_item">
-        <view class="rount_item_top">1</view>
-        <view class="rount_item_bottom">广东东软学院</view>
-    </view>
-    <view class="rount_item">
-        <view class="rount_item_top">1</view>
-        <view class="rount_item_bottom">广东东软学院</view>
-    </view>
-    <view class="rount_item">
-        <view class="rount_item_top">1</view>
-        <view class="rount_item_bottom">广东东软学院</view>
-    </view>
-    <view class="rount_item">
-        <view class="rount_item_top">1</view>
-        <view class="rount_item_bottom">广东东软学院</view>
-    </view>
-    <view class="rount_item">
-        <view class="rount_item_top">1</view>
-        <view class="rount_item_bottom">广东东软学院</view>
-    </view>
-    <view class="rount_item">
-        <view class="rount_item_top">2</view>
-        <view class="rount_item_bottom">广东东软学院</view>
-    </view>
+        <!--其他位置站点样式不变-->
+        <view class="rount_item "  wx:if="{{!item.isthis}}">
+            <view class="rount_item_top1" >
+                <image src="../../images/oldman.png"></image>
+            </view>
+            <view class="rount_item_top">{{item.index}}</view>
+            <view class="rount_item_bottom">{{item.via_stops}}</view>
+        </view>
+    </block>
 </scroll-view>

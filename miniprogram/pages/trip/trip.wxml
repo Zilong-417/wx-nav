@@ -9,7 +9,7 @@
         <image src="{{isbig==true?'../../images/big.png':'../../images/small.png'}}"></image>
         <text>{{isbig==true?'展开':'收回'}}</text>
     </view>
-    <map id="myMap" markers="{{markers}}" scale="16" show-compass="true" enable-rotate="true" enable-building="true" layer-style="1" latitude="{{ markers[0].latitude}}" longitude="{{ markers[0].longitude}}">
+    <map id="myMap" markers="{{markers}}" scale="16" show-compass="true" enable-rotate="true" enable-building="true" layer-style="1" latitude="{{ markers[0].latitude}}" longitude="{{ markers[0].longitude}}" bindcallouttap="bindshow" >
         <!--起点与终点-->
         <view class="search_nav {{search_nav_none}}">
             <view class="from_box">
@@ -22,8 +22,8 @@
             </view>
         </view>
         <!--站点详情-->
-            <scroll-view scroll-x="{{true}}" class="stop_detail {{stop_detail_none}}">
-                <view class="stop_detail_item" wx:for="{{markers}}" wx:for-item="item" wx:if="{{item.distance!=0+'米'}}">
+            <scroll-view scroll-x="{{true}}" class="stop_detail {{stop_detail_none}}" scroll-into-view="{{toViewid}}">
+                <view class="stop_detail_item" wx:for="{{markers}}" wx:for-item="item" wx:if="{{item.distance!=0+'米'}}" id="{{'v'+item.id}}" wx:key="id">
                     <view class="stop_left">
                         <view class="stop_left1">
                             <text class="stop_ad">{{item.title}}</text>
@@ -45,7 +45,7 @@
 </view>
 <!--语音识别-->
 <view class="voice_box {{voice_box_none}}">
-    <image src="../../images/scan.png" class="record_img1"></image>
+    <image src="../../images/scan.png" class="record_img1" bindtap="cameraTap"></image>
     <image src="../../images/back_index.png" class="record_img2"></image>
     <progress strokeWidth="4" percent="{{value}}" wx:if="{{showPg}}"></progress>
     <view class="dot {{isTouchStart==true?'dot-blowup':''}} {{isTouchEnd==true?'dot-zoomout':''}}" style="display:{{isDot}}"></view>

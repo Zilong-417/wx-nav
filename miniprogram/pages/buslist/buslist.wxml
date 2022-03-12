@@ -14,7 +14,7 @@
             <view class="stop_item_bottom">
                 <view class="stop_item_bottom1">
                     <text class="by">乘坐:</text>
-                    <text class="bybus">{{item.busname}}...</text>
+                    <text class="bybus">{{item.busname}}</text>
                 </view>
                 <view class="stop_item_bottom2">
                     <text>步行：{{item.walk_dis}}米</text>
@@ -24,7 +24,3 @@
         </view>
     </view>
 </block>
-<view>
-</view>
-<view class="bottom">
-</view>

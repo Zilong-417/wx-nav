@@ -8,7 +8,11 @@ let manager = plugin.getRecordRecognitionManager()
 var QQMapWX = require('../../lib/qqmap-wx-jssdk');
 // 实例化API核心类
 var qqmapsdk;
+
 Page({
+  getFre(s) {
+    return parseInt(s);
+  },
   //页面的初始数据
   data: {
     hasRecord: false,
@@ -22,7 +26,9 @@ Page({
     //自定义标记点
     markers: [],
     //是否被放大
-    isbig: true
+    isbig: true,
+    words: [],
+    toViewid: "v0"
   },
   //生命周期函数--监听页面加载
   onLoad: function (_options) {
@@ -163,11 +169,15 @@ Page({
       duration: 2000
     })
   },
-  //放大地图
+  //放大缩小地图
   big(e) {
     console.log(e)
     var that = this
-
+    if(that.data.isbig==false){
+      that.onLoad()
+    }
+    console.log(that.data.isbig)
+    console.log(that.data.lat + ',' + that.data.lon)
     //key查询附近公交
     qqmapsdk.search({
       keyword: '公交',
@@ -196,14 +206,27 @@ Page({
       success(res) {
         console.log(res)
         var mark = []
-        for (let i in res.data) {
+        for (var i in res.data) {
+          var index = String(90000000 + i)
           mark.push({
             iconPath: '../../images/busstop.png',
             title: res.data[i].title,
-            id: i,
+            id: index,
             longitude: res.data[i].location.lng,
             latitude: res.data[i].location.lat,
-            distance: this.getDistance(that.data.lat, that.data.lon, res.data[i].location.lat, res.data[i].location.lng)
+            distance: this.getDistance(that.data.lat, that.data.lon, res.data[i].location.lat, res.data[i].location.lng),
+            width: 40,
+            height: 40,
+            callout: {
+              content: res.data[i].title,
+              color: '#0000ff',
+              fontSize: 15,
+              borderRadius: 5,
+              borderWidth: 1,
+              borderColor: '#0000ff',
+              padding: 2,
+              display: 'ALWAYS'
+            }
           })
         }
         mark.unshift({
@@ -218,11 +241,11 @@ Page({
           height: 40,
           callout: {
             content: "当前位置",
-            color: '#0000ff',
+            color: '#FF0000',
             fontSize: 20,
             borderRadius: 5,
             borderWidth: 1,
-            borderColor: '#0000ff',
+            borderColor: '#FF8C00',
             padding: 2,
             display: 'ALWAYS'
           }
@@ -249,9 +272,23 @@ Page({
             voice_box_none: '',
             stop_detail_none: 'stop_detail_none'
           })
+          
         }
       }
     })
+    
+  },
+  //点击地点气泡事件
+  bindshow(e) {
+    console.log(e)
+    var myid = e.detail.markerId
+    //console.log(myid)
+    var that = this
+    that.setData({
+      toViewid: `v${myid}`
+    })
+    console.log(that.data.toViewid)
+    console.log(that.data.markers[1].id)
   },
   //获取目的名字
   getgoods: function (e) {
@@ -290,10 +327,7 @@ Page({
           })
         }, function () {})
       }
-
     })
-
-
   },
   //清空内容
   reset: function (e) {
@@ -305,13 +339,13 @@ Page({
   },
   //前往站牌
   gostop: function (e) {
-    var that=this
+    var that = this
     console.log(e)
-    var stop_lat=e.currentTarget.dataset.latitude
-    var stop_lon=e.currentTarget.dataset.longtitude
-    var stop_name=e.currentTarget.dataset.name
-     //获取高德地图步行方案
-     const promise = new Promise(function (resolve, reject) {
+    var stop_lat = e.currentTarget.dataset.latitude
+    var stop_lon = e.currentTarget.dataset.longtitude
+    var stop_name = e.currentTarget.dataset.name
+    //获取高德地图步行方案
+    const promise = new Promise(function (resolve, reject) {
       wx.request({
         url: "https://restapi.amap.com/v3/direction/walking?origin=" + that.data.lon + "," + that.data.lat + "&destination=" + stop_lon + "," + stop_lat + "&city=佛山&output=json&key=83435cf7e1f8e7b06c1d9a5353e94c06",
         success: function (res) {
@@ -326,10 +360,117 @@ Page({
       console.log(res)
       var steps = JSON.stringify(res.data.route.paths[0].steps);
       wx.navigateTo({
-        url: '../../pages/walk/walk?stop_lat='+stop_lat+'&stop_lon='+stop_lon+'&stop_name='+stop_name+'&now_lat='+that.data.lat+'&now_lon='+that.data.lon+'&steps='+steps,
+        url: '../../pages/walk/walk?stop_lat=' + stop_lat + '&stop_lon=' + stop_lon + '&stop_name=' + stop_name + '&now_lat=' + that.data.lat + '&now_lon=' + that.data.lon + '&steps=' + steps,
       })
     }, function () {})
-    
-  }
 
+  },
+  //点击识别图像
+  cameraTap() {
+    const that = this
+    wx.chooseImage({
+      success: (res) => {
+        //获取图片的临时路径
+        const tempFilePath = res.tempFilePaths[0]
+        //根据官方的要求  用base64字符编码获取图片的内容
+        wx.getFileSystemManager().readFile({
+          filePath: tempFilePath,
+          encoding: 'base64',
+          success: function (res) {
+            //调用方法
+            that.getImgInfo(res.data)
+          },
+        })
+      },
+    })
+  },
+  //根据图片的内容调用API获取图片文字
+  getImgInfo: function (imageData) {
+    wx.showLoading({
+      title: '识别中...',
+    })
+    var that = this
+    that.getBaiduToken().then(res => {
+      console.log(res)
+      //获取token
+      const token = res.data.access_token
+      console.log(token)
+      const detectUrl = `https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic?access_token=${token}` // baiduToken是已经获取的access_Token      
+      wx.request({
+        url: detectUrl,
+        data: {
+          image: imageData
+        },
+        method: 'POST',
+        dataType: 'json',
+        header: {
+          'content-type': 'application/x-www-form-urlencoded' // 必须的        
+        },
+        success: function (res, resolve) {
+          console.log(res)
+          //将 res.data.words_result数组中的内容加入到中  
+          var wordsstr = res.data.words_result.map(function (obj, index) {
+            return obj.words
+          })
+          that.setData({
+            addtext: wordsstr
+          })
+          console.log('识别后：' + res.data.words_result)
+          wx.hideLoading()
+        },
+        fail: function (res, reject) {
+          console.log('get word fail：', res.data);
+          wx.hideLoading()
+        },
+        complete: function () {
+          wx.hideLoading()
+        }
+      })
+    })
+  },
+  // 获取百度access_token  
+  getBaiduToken: function () {
+    return new Promise(resolve => {
+      var APIKEY = "U5DEIIPalSea6L8pjnjegwgc"
+      var SECKEY = "h5xGvGMSPc6TN5ZG69uTy7VlMXiTGKeg"
+      var tokenUrl = `https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=${APIKEY}&client_secret=${SECKEY}`
+      var that = this;
+      wx.request({
+        url: tokenUrl,
+        method: 'POST',
+        dataType: 'json',
+        header: {
+          'content-type': 'application/json; charset-UTF-8'
+        },
+        success: function (res) {
+          console.log("[BaiduToken获取成功]", res);
+          return resolve(res)
+        },
+        fail: function (res) {
+          console.log("[BaiduToken获取失败]", res);
+          return resolve(res)
+        }
+      })
+    })
+  },
+  //设置下拉刷新
+  onPullDownRefresh: function () {
+    var that = this
+    wx.showNavigationBarLoading() //在标题栏中显示加载
+    //模拟加载
+    setTimeout(function (res) {
+      wx.hideNavigationBarLoading() //完成停止加载
+      wx.stopPullDownRefresh() //停止下拉刷新
+      that.onLoad();
+    }, 1500);
+  },
+  onShow: function () {
+  },
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function () {
+    //加载页面
+    this.onLoad();
+  }
 })

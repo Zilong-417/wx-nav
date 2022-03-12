@@ -1,5 +1,0 @@
-// index.js
-Page({
-  data: {}
-
-});

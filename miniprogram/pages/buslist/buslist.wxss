@@ -1,6 +1,6 @@
 /* pages/buslist/buslist.wxss */
 page{
-    background-color:#F0F8FF;
+    background-color: #F5F5F5;
 }
 /*头部*/
 .nav{
@@ -94,4 +94,11 @@ page{
     font-weight: 600;
     line-height: 50px;
     margin: 0 20px 0 15px
+}
+/*弹窗样式*/
+.model_text{
+    font-size: large;
+    text-align: center;
+    font-weight: 600;
+    color: red;
 }

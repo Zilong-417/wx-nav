@@ -4,6 +4,8 @@ var app = getApp()
 var QQMapWX = require('../../lib/qqmap-wx-jssdk');
 // 实例化API核心类
 var qqmapsdk;
+//引入插件：微信同声传译
+const plugin = requirePlugin('WechatSI');
 Page({
     /**
      * 页面的初始数据
@@ -12,7 +14,12 @@ Page({
         markers: [],
         scale_change: false,
         road_detail: true,
-        step_ways: []
+        step_ways: [],
+        src: '',
+        show_nowaction: [],
+        falg1: true,
+        falg2: true,
+        falg3: true
     },
 
     /**
@@ -20,11 +27,13 @@ Page({
      */
     onLoad: function (options) {
         console.log(options)
+        var that = this
         var steps = JSON.parse(options.steps) //行走路线
         console.log(steps)
         var mark = []
         var points = []
         var step_way = []
+        var show1 = []
         //终点
         mark.push({
             id: 1,
@@ -47,8 +56,8 @@ Page({
 
         })
         //起点
-        mark.unshift({
-            id: 0,
+        mark.push({
+            id: 2,
             title: '起点',
             latitude: options.now_lat,
             longitude: options.now_lon,
@@ -97,71 +106,119 @@ Page({
         }
         console.log(points)
         console.log(mark)
-        var that = this
         //获取实时位置改变
         wx.startLocationUpdateBackground({
             success: (res) => {
                 // 计算距离函数
-                var distance = function (la1, lo1, la2, lo2) {
-                    var La1 = la1 * Math.PI / 180.0;
-                    var La2 = la2 * Math.PI / 180.0;
-                    var La3 = La1 - La2;
-                    var Lb3 = lo1 * Math.PI / 180.0 - lo2 * Math.PI / 180.0;
-                    var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(La3 / 2), 2) + Math.cos(La1) * Math.cos(La2) * Math.pow(Math.sin(Lb3 / 2), 2)));
+                var distance = function (lat1, lng1, lat2, lng2) {
+                    var radLat1 = lat1 * Math.PI / 180.0
+                    var radLat2 = lat2 * Math.PI / 180.0
+                    var a = radLat1 - radLat2;
+                    var b = (lng1 * Math.PI / 180.0) - (lng2 * Math.PI / 180.0);
+                    var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
                     s = s * 6378.137;
                     s = Math.round(s * 10000) / 10;
-                    s = s.toFixed(2);
-                    return s;
+                    s = s.toFixed(1) //保留两位小数
+                    console.log('经纬度计算的距离:' + s)
+                    return Number(s)
                 }
                 //成功的逻辑
                 wx.onLocationChange((res) => { //获取实时的定位信息
+                    console.log(res)
                     var that = this
-                    mark.push({
-                        id: 2,
-                        title: '爷在这里',
+                    console.log(res.latitude + '/' + res.longitude)
+                    mark.unshift({
+                        id: 0,
+                        title:'当前位置',
                         latitude: String(res.latitude),
-                        longitude: String(res.longitude),
-                        iconPath: "../../images/oldman.png",
-                        width: 40,
-                        height: 40,
-                        callout: {
-                            content: "👴在这",
-                            color: '#000000',
-                            fontSize: 20,
-                            borderRadius: 5,
-                            borderWidth: 1,
-                            borderColor: '#0000ff',
-                            padding: 2,
-                            display: 'ALWAYS'
-                        }
+                        longitude: String(res.longitude)
                     })
-                    mark.splice(2, mark.length - 3)
+                    mark.splice(0, mark.length - 3)
                     console.log(mark)
+                    console.log(step_way)
                     //查看当前位置是否与报点相同
                     for (var i = 0; i < step_way.length; i++) {
                         var x = step_way[i].action1_location.split(',')
-                        var action1_lon = x[0]
-                        var action1_lat = x[1]
                         var y = step_way[i].action2_location.split(',')
-                        var action2_lon = y[0]
+                        var action1_lat = x[1]
+                        var action1_lon = x[0]
                         var action2_lat = y[1]
-                        console.log(action1_lon + ',' + action1_lat + ',' + action2_lon + ',' + action2_lat)
+                        var action2_lon = y[0]
+                        console.log(action1_lon + ',' + action1_lat)
                         var action1_dis = distance(res.latitude, res.longitude, action1_lat, action1_lon)
+                        console.log('离标志点1:' + action1_dis)
                         var action2_dis = distance(res.latitude, res.longitude, action2_lat, action2_lon)
-                        console.log(action2_dis+','+action1_dis)
-                        if (action1_dis<5&&action1_dis>0) {
-                            that.setData({
-                                show_nowaction: step_way[i].instruction
-                            })
-                        } else if (action2_dis<5&&action2_dis>0) {
-                            that.setData({
-                                show_nowaction: step_way[i].action
-                            })
-                        }else{
-                            that.setData({
-                                show_nowaction: '爷爷，记得按照导航路线走哦！'
-                            })
+                        console.log('离标志点2:' + action2_dis)
+                        if (action1_dis < 5&&action1_dis>0) {
+                            var that = this
+                            console.log('falg3'+that.data.falg3)
+                            if (that.data.falg3) {
+                                show1.unshift({
+                                    id: 0,
+                                    voice: step_way[i].instruction
+                                })
+                                that.setData({
+                                    falg3: false,
+                                    voice: show1[0].voice
+                                })
+                                console.log('这里的步行指引为：' + that.data.voice)
+                                console.log('flag3：' + that.data.falg3)
+                            } else {
+                                continue
+                            }
+                        } else if (action2_dis < 3&&action2_dis>0) {
+                            var that = this
+                            console.log('falg2'+that.data.falg2)
+                            if (that.data.falg2) {
+                                show1.unshift({
+                                    id: 0,
+                                    voice: step_way[i].instruction.split('米')[1]
+                                })
+                                that.setData({
+                                    falg2: false,
+                                    voice: show1[0].voice
+                                })
+                                console.log('这里的步行指引为：' + that.data.voice)
+                                console.log('flag2：' + that.data.falg2)
+                            } else {
+                                continue
+                            }
                         }
+                        else {
+                            var that = this
+                            console.log('falg1'+that.data.falg1)
+                            if (that.data.falg1) {
+                                show1.unshift({
+                                    id: 0,
+                                    voice: '按照步行导航路线行走哦！'
+                                })
+                                that.setData({
+                                    falg1: false,
+                                    voice: show1[0].voice
+                                })
+                                console.log('这里的步行指引为：' + that.data.voice)
+                                console.log('flag1：' + that.data.falg1)
+                            } else {
+                                continue
+                            }
+                        }
+                        var content = that.data.voice;
+                        plugin.textToSpeech({
+                            lang: "zh_CN",
+                            tts: true,
+                            content: content,
+                            success: function (res) {
+                                console.log(res);
+                                console.log("succ tts", res.filename);
+                                that.setData({
+                                    src: res.filename
+                                })
+                                that.yuyinPlay();
+                            },
+                            fail: function (res) {
+                                console.log("fail tts", res)
+                            }
+                        })
                     }
                     that.setData({
                         markers: mark,
@@ -205,6 +262,7 @@ Page({
                 })
             }
         })
+
     },
     //地图放大
     big() {
@@ -220,6 +278,7 @@ Page({
             scale_change: false
         })
     },
+    //底部路线详情
     navigation_show(e) {
         console.log(e)
         var that = this
@@ -235,18 +294,41 @@ Page({
             })
         }
     },
+    //播放语音
+    yuyinPlay: function (e) {
+        if (this.data.src == '') {
+            console.log(暂无语音);
+            return;
+        }
+        this.innerAudioContext.src = this.data.src //设置音频地址
+        this.innerAudioContext.play(); //播放音频
+    },
+    // 暂停语音
+    end: function (e) {
+        this.innerAudioContext.pause(); //暂停音频
+    },
+
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
-    onReady: function () {
-
+    onReady: function (res) {
+        //创建内部 audio 上下文 InnerAudioContext 对象。
+        this.innerAudioContext = wx.createInnerAudioContext();
+        this.innerAudioContext.onError(function (res) {
+            console.log(res);
+            wx.showToast({
+                title: '语音播放失败',
+                icon: 'none',
+            })
+        })
     },
 
     /**
      * 生命周期函数--监听页面显示
      */
     onShow: function () {
-
+        //重新加载页面
+        this.onLoad();
     },
 
     /**
@@ -260,14 +342,23 @@ Page({
      * 生命周期函数--监听页面卸载
      */
     onUnload: function () {
-
+        //关闭页面暂停语音
+        this.innerAudioContext.pause(); //暂停音频
     },
 
     /**
      * 页面相关事件处理函数--监听用户下拉动作
      */
+    //设置下拉刷新
     onPullDownRefresh: function () {
-
+        var that = this
+        wx.showNavigationBarLoading() //在标题栏中显示加载
+        //模拟加载
+        setTimeout(function (res) {
+            wx.hideNavigationBarLoading() //完成停止加载
+            wx.stopPullDownRefresh() //停止下拉刷新
+            that.onLoad();
+        }, 1500);
     },
 
     /**

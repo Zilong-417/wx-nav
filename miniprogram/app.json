@@ -3,10 +3,7 @@
     "pages/trip/trip",
     "pages/busdetail/busdetail",
     "pages/walk/walk",
-    "pages/buslist/buslist",
-    "pages/my/my",
-    "pages/weather/weather",
-    "pages/index/index"
+    "pages/buslist/buslist"
 
   ],
   "window": {
@@ -18,7 +15,7 @@
   },
   "permission": {
     "scope.userLocation": {
-      "desc": "你的位置信息将用于小程序定位"
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
     }
   },
   "sitemapLocation": "sitemap.json",
