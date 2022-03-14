@@ -1,14 +1,20 @@
 /* pages/buslist/buslist.wxss */
-page{
+page {
     background-color: #F5F5F5;
+    overflow: scroll;
 }
+
 /*头部*/
-.nav{
+.nav {
     width: 100%;
     height: 60px;
     background-color: #7bbfea;
 }
-.to_address{
+
+.to_address {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     width: 80%;
     height: 40px;
     background-color: white;
@@ -20,85 +26,114 @@ page{
     margin-top: 10px;
     border-radius: 15px;
 }
-.to_address text{
+
+.to_address text {
     color: red;
 }
-/*公交*/
-.content .stop_item{
-    width: 98%;
-    height: 150px;
-    margin: 0 auto;
-    border-radius: 10px;
-    margin-top: 10px;
-    border: 1px solid 	#7744FF;
-    background-color: white;
+
+.stop_box {
+    width: 96%;
+    height: 20%;
+    margin: 2% auto;
+    border: 2px solid #D3D3D3;
     overflow: hidden;
+    border-radius: 10px;
 }
-.stop_item_top{
-    height: 55px;
-    border-bottom: 1px solid #7744FF;
-    background-color: white;
-}
-.stop_item_top .stop_name{
-    width: 75%;
-    height: 100%;
+
+.stop_box_left {
     float: left;
-    padding-left: 5%;
-    font-size: larger;
-    color: white;
-    font-weight:1000;
-    line-height: 55px;
-    background-color: #7bbfea;
-}
-.goaddress{
-    float: right;
     width: 20%;
     height: 100%;
-    font-size: larger;
-    color: white;
-    font-weight:1000;
-    text-align: center;
-    line-height: 55px;
-    background-color:red;
+    background-color: #32CD32;
 }
-.stop_item_bottom1{
-    width: 100%;
-    height: 50px;
-    border-bottom: 1px solid #ccc;
+
+.stop_box_left_change {
+    float: left;
+    width: 20%;
+    height: 100%;
+    background-color: #7bbfea;
 }
-.stop_item_bottom1 .by{
+
+.stop_box_left text {
     display: inline-block;
+    width: 60px;
     height: 30px;
-    color:black;
-    font-size: large;
+    font-size: 20px;
     font-weight: 700;
-    padding: 5px;
-    border-radius: 5px;
-    margin-top: 5px;
-    margin-left: 15px;
-}
-.stop_item_bottom1 .bybus{
-    display: inline-block;
-    height: 30px;
     color: white;
-    font-size: large;
-    font-weight: 600;
-    padding: 5px;
-    border-radius: 5px;
-    margin-top: 5px;
-    margin-left: 5px;
-    background-color: skyblue;
-}
-.stop_item_bottom2 text{
-    font-size: large;
-    font-weight: 600;
-    line-height: 50px;
-    margin: 0 20px 0 15px
-}
-/*弹窗样式*/
-.model_text{
-    font-size: large;
     text-align: center;
+    margin-top: 18%;
+
+}
+
+.stop_box_left .go {
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    font-size: 20px;
     font-weight: 600;
-    color: red;
+    color: white;
+    text-align: center;
+    margin-top: 65%;
+}
+
+.stop_box_right {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    float: left;
+    width: 80%;
+    height: 100%;
+    background-color: #F5F5F5;
+}
+
+.stop_box_right .address {
+    width: 90%;
+    height: 25%;
+    margin: 2% auto;
+    overflow: hidden;
+    border-bottom: 1px solid #DCDCDC;
+}
+
+.address image {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+}
+.address text {
+    margin-left: 10px;
+    font-size: large;
+}
+
+.address .busname {
+    display: inline-block;
+    height: 20px;
+    border: 2px solid #1E90FF;
+    padding: 3px;
+    line-height: 20px;
+    font-size: large;
+    border-radius: 5px;
+    color: #1E90FF;
+    margin-left: 10px;
+}
+
+.ways {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 90%;
+    height: 30%;
+    margin: 0 auto;
+    background-color: #DCDCDC;
+    border-radius: 5px;
+}
+
+.ways text {
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    display: inline-block;
+    font-size: large;
+    font-weight: 600;
+    margin: 0 10px 0 10px;
 }

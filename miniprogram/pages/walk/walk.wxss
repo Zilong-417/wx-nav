@@ -10,6 +10,9 @@ page{
     background-color: #7bbfea;
 }
 .top_content{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     width: 70%;
     height: 40px;
     line-height: 40px;

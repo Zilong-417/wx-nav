@@ -4,6 +4,7 @@
     "pages/busdetail/busdetail",
     "pages/walk/walk",
     "pages/buslist/buslist"
+    
 
   ],
   "window": {

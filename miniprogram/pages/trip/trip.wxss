@@ -69,12 +69,17 @@ page {
     height: 30px;
     vertical-align: middle;
 }
-.enlarge text{
+
+.enlarge text {
     font-size: 21px;
     font-weight: 600;
 }
+
 /*搜索栏*/
 .search_nav {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     position: absolute;
     display: block;
     bottom: 0;
@@ -94,7 +99,7 @@ page {
     background-color: white;
 }
 
-.search_nav  .from_box image {
+.search_nav .from_box image {
     position: absolute;
     width: 25px;
     height: 25px;
@@ -144,6 +149,7 @@ page {
     border-radius: 15px;
     overflow: hidden;
 }
+
 .stop_detail_none {
     position: absolute;
     display: none;
@@ -165,34 +171,40 @@ page {
     border-radius: 15px;
     overflow: hidden;
 }
-.stop_left{
+
+.stop_left {
     float: left;
     width: 70%;
     height: 100%;
 }
-.stop_left1{
+
+.stop_left1 {
     height: 50%;
-    border-bottom:  1px solid #ccc;
+    border-bottom: 1px solid #ccc;
 }
-.stop_left1 .stop_ad{
+
+.stop_left1 .stop_ad {
     line-height: 70px;
     margin-left: 20px;
     font-size: large;
     font-weight: 600;
 }
-.stop_left>text{
+
+.stop_left>text {
     line-height: 70px;
     margin-left: 20px;
     font-size: large;
     font-weight: 400;
 }
-.stop_right{
+
+.stop_right {
     float: left;
     width: 30%;
     height: 100%;
     background-color: #7bbfea;
 }
-.stop_right text{
+
+.stop_right text {
     line-height: 130px;
     text-align: center;
     font-size: larger;
@@ -200,6 +212,7 @@ page {
     color: white;
     margin-left: 20px;
 }
+
 /*前往与清空*/
 .sub {
     display: block;

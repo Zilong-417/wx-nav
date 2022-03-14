@@ -1,4 +1,4 @@
-<!--pades/busdetail/busdetail.wxml-->
+<!-- pades/busdetail/busdetail.wxml -->
 <!--头-->
 <view class="nav">
     <view class="to_address">{{busname}}</view>
@@ -35,23 +35,53 @@
 </block>
 <!--路线-->
 <scroll-view class="rount" scroll-x="{{true}}">
-    <block wx:for="{{viastops}}"  wk:key="index" wx:for-item="item">
+    <!--第一程-->
+    <block wx:for="{{viastops}}" wk:key="index" wx:for-item="item">
         <!--更改当前所在位置站点样式-->
-        <!-- <text style="z-index: 200;">--{{item.via_stops}}--</text> -->
-        <view class="rount_item {{rount_item_change}}"  wx:if="{{item.isthis}}">
-            <view class="rount_item_top1" >
+        <view class="rount_item {{rount_item_change}}" wx:if="{{item.isthis}}">
+            <view class="rount_item_top1">
                 <image src="../../images/oldman.png" style="display: block;"></image>
             </view>
             <view class="rount_item_top">{{item.index}}</view>
-            <view class="rount_item_bottom">{{item.via_stops}}</view>
+            <view class="rount_item_bottom">{{item.via_stops}}</view> -->
         </view>
         <!--其他位置站点样式不变-->
-        <view class="rount_item "  wx:if="{{!item.isthis}}">
-            <view class="rount_item_top1" >
+        <view class="rount_item " wx:if="{{!item.isthis}}">
+            <view class="rount_item_top1">
                 <image src="../../images/oldman.png"></image>
             </view>
             <view class="rount_item_top">{{item.index}}</view>
-            <view class="rount_item_bottom">{{item.via_stops}}</view>
+            <view class="rount_item_bottom" wx:if="{{!item.isthat}}">{{item.via_stops}}</view>
+            <view class="rount_item_bottom {{rount_item_bottom_change}}" wx:if="{{item.isthat}}" style="width: 25px;">{{item.via_stops}}</view>
+        </view>
+    </block>
+     <!--中转换乘路线指引-->
+     <view class="rount_item" style="width: 100px;" bindtap="transfer" wx:if="{{istransfer>0}}"> 
+            <view class="rount_item_top1">
+                <image src="../../images/transfer.png" style="display: block;width: 50%;height: 100%;"></image>
+            </view>
+            <view class="rount_item_top" style="background-color:	#DC143C;">换乘</view>
+            <view class="rount_item_bottom" style="margin-left: 20px;color: red;">步行{{walkdis2}}米</view>
+    </view>
+    <!--第二程-->
+    <block wx:for="{{viastops2}}" wk:key="index" wx:for-item="item">
+        <!--更改当前所在位置站点样式-->
+        <view class="rount_item {{rount_item_change}}" wx:if="{{item.isthis}}">
+            <view class="rount_item_top1">
+                <image src="../../images/oldman.png" style="display: block;"></image>
+            </view>
+            <view class="rount_item_top" style="background-color: 	#32CD32;">{{item.index}}</view>
+            <view class="rount_item_bottom" >{{item.via_stops}}</view>
+            
+        </view>
+        <!--其他位置站点样式不变-->
+        <view class="rount_item " wx:if="{{!item.isthis}}">
+            <view class="rount_item_top1">
+                <image src="../../images/oldman.png"></image>
+            </view>
+            <view class="rount_item_top" style="background-color: 	#32CD32;">{{item.index}}</view>
+            <view class="rount_item_bottom" wx:if="{{!item.isthat}}">{{item.via_stops}}</view>
+            <view class="rount_item_bottom {{rount_item_bottom_change}}" wx:if="{{item.isthat}}" style="width: 25px;">{{item.via_stops}}</view>
         </view>
     </block>
 </scroll-view>
