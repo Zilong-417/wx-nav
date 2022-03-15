@@ -1,7 +1,8 @@
 <!-- pades/busdetail/busdetail.wxml -->
 <!--头-->
 <view class="nav">
-    <view class="to_address">{{busname}}</view>
+    <view class="to_address" wx:if="{{istransfer==0}}">{{busname}}</view>
+    <view class="to_address" wx:if="{{istransfer>0}}">{{busname}}---{{busname2}}</view>
 </view>
 <!--地图-->
 <view class="map">
@@ -19,7 +20,8 @@
 <block wx:for="{{stopdetail}}" wx:key="index" wx:for-item="item">
     <view class="stop_detail">
         <view class="stop_detail_left">
-            <text>{{item.busname}}</text>
+            <text wx:if="{{istransfer==0}}">{{item.busname}}</text>
+            <text wx:if="{{istransfer>0}}">{{item.busname}}>{{item.busname2}}</text>
             <view class="stop_detail_left_cost">
                 <text>票价:{{item.cost}}元</text>
                 <text style="margin-left: 10px;">车程:{{item.sumtime}}小时</text>

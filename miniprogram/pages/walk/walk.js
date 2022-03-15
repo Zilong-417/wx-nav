@@ -149,7 +149,7 @@ Page({
                         console.log('离标志点1:' + action1_dis)
                         var action2_dis = distance(res.latitude, res.longitude, action2_lat, action2_lon)
                         console.log('离标志点2:' + action2_dis)
-                        if (action1_dis < 5&&action1_dis>0) {
+                        if (action1_dis < 5) {
                             var that = this
                             console.log('falg3'+that.data.falg3)
                             if (that.data.falg3) {
@@ -166,20 +166,22 @@ Page({
                             } else {
                                 continue
                             }
-                        } else if (action2_dis < 3&&action2_dis>0) {
+                        } 
+                        else if (action2_dis < 5) {
                             var that = this
-                            console.log('falg2'+that.data.falg2)
-                            if (that.data.falg2) {
+                            console.log('falg3'+that.data.falg3)
+                            if (!that.data.falg3) {
                                 show1.unshift({
                                     id: 0,
-                                    voice: step_way[i].instruction.split('米')[1]
+                                    voice: step_way[i+1].instruction
                                 })
                                 that.setData({
-                                    falg2: false,
+                                    //falg2: false,
+                                    falg3: true,
                                     voice: show1[0].voice
                                 })
                                 console.log('这里的步行指引为：' + that.data.voice)
-                                console.log('flag2：' + that.data.falg2)
+                                console.log('flag3：' + that.data.falg3)
                             } else {
                                 continue
                             }

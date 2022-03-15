@@ -28,7 +28,6 @@ Page({
         var mark = []
         var via_stops = [] //第一程
         var via_stops2 = [] //第二程
-        var walk2 = []
         var show = []
         var busname = options.busname //第一程公交路线名
         var cost = options.cost //花费
@@ -45,7 +44,7 @@ Page({
 
         var istransfer = stops.istransfer //换乘数
 
-        var busname2 = options.busname2 //第二程公交路线名
+        var busname2 = stops.busname2 //第二程公交路线名
         var viastop2 = stops.via_stops2 //第二程途径站点
         var stopname2 = stops.stopname2 //第二程站牌名
         var stoplocation2 = stops.stoplocation2 //第二程首站牌坐标
@@ -75,6 +74,7 @@ Page({
         //站牌信息
 
         stopde.push({
+            busname2: busname2,
             busname: busname,
             cost: cost,
             sumtime: sumtime
@@ -200,15 +200,15 @@ Page({
                             } else {
                                 continue
                             }
-                        } else {
+                        } else if (action1_dis > 10) {
                             console.log('播报下一站')
-                            if (that.data.falg1) {
+                            if (!that.data.falg) {
                                 show.unshift({
                                     id: 0,
                                     voice: '下一站' + via_stops[i + 1].via_stops
                                 })
                                 that.setData({
-                                    falg1: false,
+                                    falg: true,
                                     voice: show[0].voice,
                                 })
                                 console.log(that.data.voice)
@@ -238,64 +238,66 @@ Page({
                         }
                     }
                     //当前位置与第二程站牌距离逻辑
-                    for (var i = 0; i < via_stops2.length - 1; i++) {
-                        var action1_dis = distance(res.latitude, res.longitude, via_stops2[i].latitude, via_stops2[i].longitude)
-                        // console.log( via_stops[i].latitude+','+ via_stops[i].longitude)
-                        console.log(action1_dis)
-                        if (action1_dis < 10) {
-                            via_stops2[i].isthis = true
-                            console.log(Boolean(via_stops2[i].isthis))
-                            console.log('播报到站提醒')
-                            if (that.data.falg) {
-                                show.unshift({
-                                    id: 0,
-                                    voice: via_stops2[i].via_stops + '就要到了，请叔叔阿姨做好下车准备哦！'
-                                })
-                                that.setData({
-                                    falg: false,
-                                    voice: show[0].voice,
-                                    rount_item_change: 'rount_item_change',
-                                    hidden: false
-                                })
-                                console.log(that.data.voice)
-                            } else {
-                                continue
-                            }
-                        } else {
-                            console.log('播报下一站')
-                            if (that.data.falg1) {
-                                show.unshift({
-                                    id: 0,
-                                    voice: '下一站' + via_stops2[i + 1].via_stops
-                                })
-                                that.setData({
-                                    falg1: false,
-                                    voice: show[0].voice,
-                                })
-                                console.log(that.data.voice)
-                            } else {
-                                continue
-                            }
-                        }
-                        var content = that.data.voice;
-                        if (that.data.voiceup) {
-                            plugin.textToSpeech({
-                                lang: "zh_CN",
-                                tts: true,
-                                content: content,
-                                success: function (res) {
-                                    console.log(res);
-                                    console.log("succ tts", res.filename);
-                                    that.setData({
-                                        src: res.filename
+                    if (istransfer > 0) {
+                        for (var i = 0; i < via_stops2.length - 1; i++) {
+                            var action1_dis = distance(res.latitude, res.longitude, via_stops2[i].latitude, via_stops2[i].longitude)
+                            // console.log( via_stops[i].latitude+','+ via_stops[i].longitude)
+                            console.log(action1_dis)
+                            if (action1_dis < 10) {
+                                via_stops2[i].isthis = true
+                                console.log(Boolean(via_stops2[i].isthis))
+                                console.log('播报到站提醒')
+                                if (that.data.falg) {
+                                    show.unshift({
+                                        id: 0,
+                                        voice: via_stops2[i].via_stops + '就要到了，请叔叔阿姨做好下车准备哦！'
                                     })
-                                    that.yuyinPlay();
-
-                                },
-                                fail: function (res) {
-                                    console.log("fail tts", res)
+                                    that.setData({
+                                        falg: false,
+                                        voice: show[0].voice,
+                                        rount_item_change: 'rount_item_change',
+                                        hidden: false
+                                    })
+                                    console.log(that.data.voice)
+                                } else {
+                                    continue
                                 }
-                            })
+                            } else if (action1_dis > 10) {
+                                console.log('播报下一站')
+                                if (!that.data.falg) {
+                                    show.unshift({
+                                        id: 0,
+                                        voice: '下一站' + via_stops2[i + 1].via_stops
+                                    })
+                                    that.setData({
+                                        falg: false,
+                                        voice: show[0].voice,
+                                    })
+                                    console.log(that.data.voice)
+                                } else {
+                                    continue
+                                }
+                            }
+                            var content = that.data.voice;
+                            if (that.data.voiceup) {
+                                plugin.textToSpeech({
+                                    lang: "zh_CN",
+                                    tts: true,
+                                    content: content,
+                                    success: function (res) {
+                                        console.log(res);
+                                        console.log("succ tts", res.filename);
+                                        that.setData({
+                                            src: res.filename
+                                        })
+                                        that.yuyinPlay();
+
+                                    },
+                                    fail: function (res) {
+                                        console.log("fail tts", res)
+                                    }
+                                })
+                            }
                         }
                     }
                     console.log(via_stops)
