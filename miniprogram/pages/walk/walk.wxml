@@ -30,7 +30,7 @@
         </view>
         <!--路线详情具体内容-->
         <view class="road_detail {{road_detail_change}}">
-            <block wx:for="{{steps}}" wx:for-item="item">
+            <block wx:for="{{steps}}" wx:for-item="item" wx:key="index">
                 <view class="detail">
                     <text> {{item.instruction}}</text>
                 </view>

@@ -87,7 +87,13 @@ const formatHour = date => {
   var hour = myDate.getHours();
   return hour
 }
-
+const flag=n=>{
+  let judge=[]
+  for(let i=0;i<n;i++){
+    judge[i]=true
+  }
+  return judge
+}
 //转换时间
 const formatNumber = n => {
   n = n.toString()
@@ -200,5 +206,6 @@ module.exports = {
   hideLoading,
   showTip,
   showSuccess,
-  pageMenu
+  pageMenu,
+  flag
 }

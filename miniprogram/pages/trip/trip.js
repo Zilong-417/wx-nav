@@ -359,8 +359,9 @@ Page({
     promise.then(function (res) {
       console.log(res)
       var steps = JSON.stringify(res.data.route.paths[0].steps);
+     // console.log(steps)
       wx.navigateTo({
-        url: '../../pages/walk/walk?stop_lat=' + stop_lat + '&stop_lon=' + stop_lon + '&stop_name=' + stop_name + '&now_lat=' + that.data.lat + '&now_lon=' + that.data.lon + '&steps=' + steps,
+        url: '../../pages/walk/walk?stop_lat=' + stop_lat + '&stop_lon=' + stop_lon + '&stop_name=' + stop_name + '&now_lat=' + that.data.lat + '&now_lon=' + that.data.lon + '&steps=' + steps
       })
     }, function () {})
 

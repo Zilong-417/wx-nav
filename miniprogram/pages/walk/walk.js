@@ -6,6 +6,7 @@ var QQMapWX = require('../../lib/qqmap-wx-jssdk');
 var qqmapsdk;
 //引入插件：微信同声传译
 const plugin = requirePlugin('WechatSI');
+var utils=require('../../util/util.js')
 Page({
     /**
      * 页面的初始数据
@@ -19,7 +20,8 @@ Page({
         show_nowaction: [],
         falg1: true,
         falg2: true,
-        falg3: true
+        falg3: true,
+        judge:utils.flag(50)
     },
 
     /**
@@ -129,14 +131,14 @@ Page({
                     console.log(res.latitude + '/' + res.longitude)
                     mark.unshift({
                         id: 0,
-                        title:'当前位置',
+                        title: '当前位置',
                         latitude: String(res.latitude),
                         longitude: String(res.longitude)
                     })
                     mark.splice(0, mark.length - 3)
                     console.log(mark)
                     console.log(step_way)
-                    //查看当前位置是否与报点相同
+                    //查看当前位置与报点
                     for (var i = 0; i < step_way.length; i++) {
                         var x = step_way[i].action1_location.split(',')
                         var y = step_way[i].action2_location.split(',')
@@ -149,46 +151,28 @@ Page({
                         console.log('离标志点1:' + action1_dis)
                         var action2_dis = distance(res.latitude, res.longitude, action2_lat, action2_lon)
                         console.log('离标志点2:' + action2_dis)
-                        if (action1_dis < 5) {
+                        var action3_dis = distance(action1_lat, action1_lon, action2_lat, action2_lon)
+                        console.log('报点两点距离:' + action3_dis)
+                        if (action1_dis <action3_dis/2) {
                             var that = this
-                            console.log('falg3'+that.data.falg3)
-                            if (that.data.falg3) {
+                            //console.log('falg3' + that.data.falg3)
+                            var flag1=that.data.judge[i]
+                            if (flag1) {
                                 show1.unshift({
                                     id: 0,
                                     voice: step_way[i].instruction
                                 })
                                 that.setData({
-                                    falg3: false,
+                                    ['judge'+'['+i+']']:!flag1,
                                     voice: show1[0].voice
                                 })
                                 console.log('这里的步行指引为：' + that.data.voice)
-                                console.log('flag3：' + that.data.falg3)
                             } else {
                                 continue
                             }
-                        } 
-                        else if (action2_dis < 5) {
+                        }else {
                             var that = this
-                            console.log('falg3'+that.data.falg3)
-                            if (!that.data.falg3) {
-                                show1.unshift({
-                                    id: 0,
-                                    voice: step_way[i+1].instruction
-                                })
-                                that.setData({
-                                    //falg2: false,
-                                    falg3: true,
-                                    voice: show1[0].voice
-                                })
-                                console.log('这里的步行指引为：' + that.data.voice)
-                                console.log('flag3：' + that.data.falg3)
-                            } else {
-                                continue
-                            }
-                        }
-                        else {
-                            var that = this
-                            console.log('falg1'+that.data.falg1)
+                            console.log('falg1' + that.data.falg1)
                             if (that.data.falg1) {
                                 show1.unshift({
                                     id: 0,
@@ -204,6 +188,7 @@ Page({
                                 continue
                             }
                         }
+                        console.log(that.data.judge)
                         var content = that.data.voice;
                         plugin.textToSpeech({
                             lang: "zh_CN",

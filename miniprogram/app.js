@@ -3,7 +3,7 @@
 import QQMapWX from "./util/qqmap-wx-jssdk.min.js"
 App({
   onLaunch: function () {
-   
+
     if (!wx.cloud) {
       console.error('请使用 2.2.3 或以上的基础库以使用云能力')
     } else {
@@ -16,7 +16,7 @@ App({
         traceUser: true,
       })
     }
-    
+
     this.getOpenid();
     this.autoUserLocation();
 
@@ -53,14 +53,16 @@ App({
             let result = res.result;
             let myCityName = result.address_component.city || result.address_component.district;
             wx.setStorageSync('myCityName', myCityName);
-            Object.assign(values,{myCityName:myCityName})
+            Object.assign(values, {
+              myCityName: myCityName
+            })
             if (that.isLocationCallback) {
               that.isLocationCallback(values);
             }
           },
           fail(err) {}
         })
-       
+
       }
     })
   },
@@ -105,8 +107,8 @@ App({
     })
   },
 
-	//打开地址设置
-  openSettingLocation( callback = () => {}) {
+  //打开地址设置
+  openSettingLocation(callback = () => {}) {
     let that = this;
     wx.openSetting({
       success(res) {
@@ -118,15 +120,23 @@ App({
           that.getWxLocation();
           callback(true);
         }
-      },fail(err){
+      },
+      fail(err) {
         console.log(err)
       }
     })
   },
-
+  //创建初始flag
+  // flag() {
+  //   let judge=[]
+  //   for(let i=0;i<50;i++){
+  //     judge[i]=true
+  //   }
+  //   return judge
+  // },
 
   globalData: {
-    userInfo:null,//用户信息
+    userInfo: null, //用户信息
     openid: '',
     keepscreenon: false,
     systeminfo: {},
