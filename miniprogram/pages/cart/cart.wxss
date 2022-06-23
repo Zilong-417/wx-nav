@@ -1,0 +1,182 @@
+/* pages/cart/cart.wxss */
+page{
+    width: 100%;
+    height: 100%;
+}
+/*头部区域*/
+.top{
+    width: 100%;
+    height: 50px;
+    background-color: #7bbfea;
+}
+.top_content{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 70%;
+    height: 40px;
+    line-height: 40px;
+    font-size: large;
+    font-weight: 600;
+    text-align: center;
+    background-color: white;
+    margin: 0 auto;
+    border-radius: 15px;
+}
+/*地图区域*/
+.map_box{
+    position: relative;
+    width: 98%;
+    height: 90%;
+    margin: 0 auto;
+    border-radius: 15px;
+    margin-top: 2%;
+    border: 1px solid #7bbfea;
+    overflow: hidden;
+    transform: translateY(0);
+}
+#map{
+    width: 100%;
+    height: 100%;
+}
+.big_small_box{
+    position: absolute;
+    width: 40px;
+    height: 120px;
+    background-color:white;
+    border: 1px solid #7bbfea;
+    right: 2%;
+    top:50%;
+    border-radius: 15px;
+    margin-bottom: 200px;
+    overflow: hidden;
+    z-index: 10;
+}
+.big_small_box .big{
+    width: 100%;
+    height: 50%;
+    border-bottom: 1px solid #77bbbb;
+    font-size: 40px;
+    line-height: 100%;
+    text-align: center;
+    font-weight: 700;
+}
+.big_small_box .small{
+    width: 100%;
+    height: 50%;
+    font-size: 40px;
+    line-height: 100%;
+    text-align: center;
+    font-weight: 700;
+}
+/*路线报点*/
+.road{
+    position: absolute;
+    left: 2%;
+    top: 1%;
+    width: 96%;
+    height: 15%;
+    border: 1px solid #7bbfea;
+    background-color: white;
+    overflow: hidden;
+    border-radius: 10px;
+}
+.content{
+    width: 100%;
+    height: 98%;
+    padding: 2% 0 0 3%;
+    letter-spacing: 1px;
+    text-align: center;
+    white-space: nowrap;
+}
+.content text{
+    font-size: 30px;
+    font-weight: 600;
+}
+/*路线详情*/
+.navigation_box{
+    position: absolute;
+    left: 2%;
+    bottom: 2%;
+    width: 96%;
+    height: 8%;
+    border-radius: 15px;
+    border: 1px solid #7bbfea;
+    background-color:white;
+    overflow: hidden;
+    font-weight: 600;
+}
+.navigation_box .navigation_box_left{
+    float: left;
+    width: 80%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: larger;
+}
+.navigation_box_left image{
+    width: 20px;
+    height: 20px;
+    padding-left: 20px;
+}
+.navigation_box .navigation_box_right{
+    float: left;
+    width: 19%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: larger;
+    border-left: 1px solid #7bbfea;
+}
+.navigation_box_right image{
+    width: 40px;
+    height: 40px;
+}
+.larger image{
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+}
+.road_detail{
+    position: absolute;
+    display: none;
+    bottom: 10%;
+    left: 2%;
+    width: 96%;
+    height:70% ;
+    background-color: white;
+    border: 1px solid #7bbfea;
+    border-radius: 10px;
+    z-index: 20;
+    overflow: scroll;
+}
+.road_detail_change{
+    position: absolute;
+    display: block;
+    bottom: 10%;
+    left: 2%;
+    width: 96%;
+    height:70% ;
+    background-color: white;
+    border: 1px solid #7bbfea;
+    border-radius: 10px;
+    z-index: 20;
+    overflow: scroll;
+}
+.road_detail .detail{
+    width: 90%;
+    height: 5%;
+    margin: 0 auto;
+    margin-top: 10px;
+    padding:20px 0 20px 0;
+    background-color: aliceblue;
+    border-bottom: 1px solid #ccc;
+    border-radius: 10px;
+}
+.road_detail .detail text{
+    font-size: large;
+    font-weight: 500;
+    margin-left: 3%;
+}

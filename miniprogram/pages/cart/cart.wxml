@@ -1,0 +1,42 @@
+<!--pages/cart/cart.wxml-->
+<view class="top">
+    <view class="top_content">
+        正在前往<text style="color: red;">{{goods}}</text>
+    </view>
+</view>
+<view class="map_box">
+    <map id="map" markers="{{markers}}" scale="24" show-compass="true" enable-rotate="true" enable-building="true" layer-style="1" latitude="{{markers[0].latitude}}" longitude="{{markers[0].longitude}}" polyline="{{polyline}}" show-location="{{true}}" >
+        <!--路线报点-->
+        <view class="road">
+            <view class="content">
+                <text style="font-size: 40px;">{{action2_dis}}米</text>
+                <text style="font-size: 40px;color: red;padding-left: 8px;">{{action}}</text>
+                <view>
+                    <text style="font-size: 25px;">{{'进入'+road}}</text>
+                </view>
+            </view>
+        </view>
+        <!--底部路线详情-->
+        <view class="navigation_box">
+            <view class="navigation_box_left">
+                <text>{{distance}}公里</text>
+                <text style="padding-left: 20px;">{{duration}}分钟</text>
+                <view>
+                    <image src="../../images/hld.png"></image>
+                    <text>{{traffic_lights}}</text>
+                </view>
+            </view>
+            <view class="navigation_box_right" bindtap="navigation_show">
+                <image src="{{road_detail==true?'../../images/larger.png':'../../images/shouhui.png'}}"></image>
+            </view>
+        </view>
+        <!--路线详情具体内容-->
+        <view class="road_detail {{road_detail_change}}">
+            <block wx:for="{{step_ways}}" wx:for-item="item" wx:key="index">
+                <view class="detail">
+                    <text>{{item.instruction}}</text>
+                </view>
+            </block>
+        </view>
+    </map>
+</view>

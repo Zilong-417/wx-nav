@@ -1,6 +1,6 @@
 /* pages/buslist/buslist.wxss */
 page {
-    background-color: #F5F5F5;
+    background-color: white;
     overflow: scroll;
 }
 
@@ -35,9 +35,10 @@ page {
     width: 96%;
     height: 20%;
     margin: 2% auto;
-    border: 2px solid #D3D3D3;
     overflow: hidden;
     border-radius: 10px;
+    text-shadow: 1px 1px 1px rgba(255,255,255, .1);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .stop_box_left {
@@ -56,14 +57,13 @@ page {
 
 .stop_box_left text {
     display: inline-block;
-    width: 60px;
+    width: 70px;
     height: 30px;
     font-size: 20px;
     font-weight: 700;
     color: white;
     text-align: center;
     margin-top: 18%;
-
 }
 
 .stop_box_left .go {
@@ -94,7 +94,14 @@ page {
     overflow: hidden;
     border-bottom: 1px solid #DCDCDC;
 }
-
+.address .stop_list{
+    float: left;
+    display: block;
+    width: 89%;
+    height: 25%;
+    white-space: nowrap;
+    overflow: hidden;
+}
 .address image {
     width: 25px;
     height: 25px;

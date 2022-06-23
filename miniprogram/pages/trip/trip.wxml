@@ -9,7 +9,12 @@
         <image src="{{isbig==true?'../../images/big.png':'../../images/small.png'}}"></image>
         <text>{{isbig==true?'展开':'收回'}}</text>
     </view>
-    <map id="myMap" markers="{{markers}}" scale="16" show-compass="true" enable-rotate="true" enable-building="true" layer-style="1" latitude="{{ markers[0].latitude}}" longitude="{{ markers[0].longitude}}" bindcallouttap="bindshow" >
+    <map id="myMap" markers="{{markers}}" scale="15" show-compass="true" enable-rotate="true" enable-building="true" layer-style="1" latitude="{{ markers[0].latitude}}" longitude="{{ markers[0].longitude}}" bindcallouttap="bindshow">
+        <!--输入框文字放大提示-->
+        <view class="large_text" wx:if="{{addtext!=undefined&&addtext!=''&&bindfocus}}" style="display: block;">
+            <text>{{addtext}}</text>
+        </view>
+        <view class="triangle-down" wx:if="{{addtext!=undefined&&addtext!=''&&bindfocus}}"></view>
         <!--起点与终点-->
         <view class="search_nav {{search_nav_none}}">
             <view class="from_box">
@@ -18,30 +23,49 @@
             </view>
             <view class="search_box">
                 <image src="../../images/to.png"></image>
-                <input type="text" placeholder="请输入目的地" value="{{addtext}}" bindinput="getgoods" />
+                <input type="text" placeholder="请输入目的地" value="{{addtext}}" bindinput="getgoods" cursor-spacing="14" bindblur="inputblur" bindfocus="inputfouse" />
             </view>
         </view>
         <!--站点详情-->
-            <scroll-view scroll-x="{{true}}" class="stop_detail {{stop_detail_none}}" scroll-into-view="{{toViewid}}">
-                <view class="stop_detail_item" wx:for="{{markers}}" wx:for-item="item" wx:if="{{item.distance!=0+'米'}}" id="{{'v'+item.id}}" wx:key="id">
-                    <view class="stop_left">
-                        <view class="stop_left1">
-                            <text class="stop_ad">{{item.title}}</text>
-                        </view>
-                        <text>距离你：</text><text style="color: red;">{{item.distance}}</text>
+        <scroll-view scroll-x="{{true}}" class="stop_detail {{stop_detail_none}}" scroll-into-view="{{toViewid}}" scroll-with-animation="true">
+            <view class="stop_detail_item" wx:for="{{markers}}" wx:for-item="item" wx:if="{{item.distance!=0+'米'}}" id="{{'v'+item.id}}" wx:key="id">
+                <view class="stop_left">
+                    <view class="stop_left1">
+                        <text class="stop_ad">{{item.title}}</text>
                     </view>
-                    <view class="stop_right" bindtap="gostop" data-name="{{item.title}}" data-latitude="{{item.latitude}}" data-longtitude="{{item.longitude}}">
-                        <text>前往</text>
-                    </view>
+                    <text>距离您：</text><text style="color: red;">{{item.distance}}</text>
                 </view>
-           
-            </scroll-view>
+                <view class="stop_right" bindtap="gostop" data-name="{{item.title}}" data-latitude="{{item.latitude}}" data-longtitude="{{item.longitude}}">
+                    <text>前往</text>
+                </view>
+            </view>
+
+        </scroll-view>
     </map>
+</view>
+<!--出行方式选择-->
+<view class="trip_chose" wx:if="{{hidden}}">
+    <view class="trip_chose_in ">
+        <view class="chose_text">
+            <text>请选择您的出行方式</text>
+            <image src="../../images/deltan.png" bindtap="candel_chose"></image>
+        </view>
+        <view class="chose_bottom">
+            <view class="chose_left" bindtap="gobus">
+                <image src="../../images/bus1.png"></image>
+                <text>公交</text>
+            </view>
+            <view class="chose_left" style="margin-left: 3%;" bindtap="gocart">
+                <image src="../../images/cart1.png"></image>
+                <text>自驾</text>
+            </view>
+        </view>
+    </view>
 </view>
 <!--清空与提交-->
 <view class="sub {{sub_none}}">
-    <button class="sub_btn" bindtap="goaddress" style="color: white;font-size: larger;border-radius: 15px;">前往</button>
-    <button class="sub_btn" style="background-color:red;margin-left: 6%;color: white;font-size: larger;border-radius: 15px;" bindtap="reset">清空</button>
+    <button class="sub_btn" bindtap="goaddress">前往</button>
+    <button class="sub_btn" style="background-color:#FF0000;float: right;color: white;font-size: larger;" bindtap="reset">清空</button>
 </view>
 <!--语音识别-->
 <view class="voice_box {{voice_box_none}}">

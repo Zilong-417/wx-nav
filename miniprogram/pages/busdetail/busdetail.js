@@ -2,6 +2,7 @@
 var app = getApp()
 //引入插件：微信同声传译
 const plugin = requirePlugin('WechatSI');
+var utils = require('../../util/util.js')
 Page({
 
     /**
@@ -14,7 +15,10 @@ Page({
         falg: true,
         falg1: true,
         src: '',
-        voiceup: false
+        voiceup: false,
+        judge1: utils.flag(100),
+        judge2: utils.flag(100),
+        judge3: utils.flag(100)
     },
     /**
      * 生命周期函数--监听页面加载
@@ -28,6 +32,7 @@ Page({
         var mark = []
         var via_stops = [] //第一程
         var via_stops2 = [] //第二程
+        var via_stops3 = [] //第三程
         var show = []
         var busname = options.busname //第一程公交路线名
         var cost = options.cost //花费
@@ -42,8 +47,9 @@ Page({
         var origin_location = stops.origin_location //第一程起点坐标
         var destination_location = stops.destination_location //第一程终点坐标
 
-        var istransfer = stops.istransfer //换乘数
-
+        var istransfer0 = stops.istransfer0 //换乘数
+        var istransfer1 = stops.istransfer1
+        var istransfer2 = stops.istransfer2
         var busname2 = stops.busname2 //第二程公交路线名
         var viastop2 = stops.via_stops2 //第二程途径站点
         var stopname2 = stops.stopname2 //第二程站牌名
@@ -57,42 +63,60 @@ Page({
         var walkdis2 = stops.walkdis2 //第二程行走距离
         console.log(origin_location + '/' + origin_location)
 
+        var busname3 = stops.busname3 //第三程公交路线名
+        var viastop3 = stops.via_stops3 //第三程途径站点
+        var stopname3 = stops.stopname3 //第三程站牌名
+        var stoplocation3 = stops.stoplocation3 //第三程首站牌坐标
+        var stoplocation_name3 = stops.stoplocation_name3 //第三程首站牌名
+        var arrival_stop3 = stops.arrival_stop3 //第三程终点坐标
+        var arrival_stop_name3 = stops.arrival_stop_name3 //第三程终点名
+        var steps3 = stops.steps3 //第三程步行路线
+        var origin_location3 = stops.origin_location3 //第三程起点坐标
+        var destination_location3 = stops.destination_location3 //第三程终点坐标
+        var walkdis3 = stops.walkdis3 //第三程行走距离
+        console.log(istransfer0 + '***' + istransfer1 + '***' + istransfer2)
         //车程坐标处理
-        if (istransfer > 0) {
-            var po_Len = (stops.buspolyline + stops.buspolyline2).split(';');
-        } else {
+        if (istransfer0 == 0 && istransfer1 > 0 && istransfer2 > 0) {
+            var po_Len = (stops.buspolyline + stops.buspolyline2 + stops.buspolyline3).split(';');
+        } else if (istransfer0 == 0 && istransfer1 == 0 && istransfer2 == 0) {
             var po_Len = stops.buspolyline.split(';');
+        } else if (istransfer0 == 0 && istransfer1 > 0 && istransfer2 == 0) {
+            var po_Len = (stops.buspolyline + stops.buspolyline2).split(';');
         }
         console.log(po_Len)
+        console.log(istransfer0 + '****' + istransfer1 + '***' + istransfer2)
         for (var j = 0; j < po_Len.length; j++) {
             points.push({
                 longitude: parseFloat(po_Len[j].split(',')[0]),
                 latitude: parseFloat(po_Len[j].split(',')[1]),
             })
         }
-        console.log(points)
+        //console.log(points)
         //站牌信息
-
         stopde.push({
             busname2: busname2,
             busname: busname,
+            busname3: busname3,
+            istransfer0: istransfer0,
+            istransfer1: istransfer1,
+            istransfer2: istransfer2,
             cost: cost,
             sumtime: sumtime
         })
-
-        //第一程途径站点坐标处理
-        for (var i = 0; i < viastop.length; i++) {
-            console.log(viastop[i].name + '/' + viastop[i].location)
-            via_stops.push({
-                index: i + 2,
-                via_stops: viastop[i].name,
-                longitude: parseFloat(viastop[i].location.split(',')[0]),
-                latitude: parseFloat(viastop[i].location.split(',')[1]),
-                isthis: false
-            })
-        }
+        console.log(viastop)
         //第二程途径站点坐标处理
-        if (istransfer > 0) {
+        if (istransfer0 == 0 && istransfer1 > 0 && istransfer2 == 0) {
+            //第一程途径站点坐标处理
+            for (var i = 0; i < viastop.length; i++) {
+                console.log(viastop[i].name + '/' + viastop[i].location)
+                via_stops.push({
+                    index: i + 2,
+                    via_stops: viastop[i].name,
+                    longitude: parseFloat(viastop[i].location.split(',')[0]),
+                    latitude: parseFloat(viastop[i].location.split(',')[1]),
+                    isthis: false
+                })
+            }
             for (var j = 0; j < viastop2.length; j++) {
                 console.log(viastop2[j].name + '/' + viastop2[j].location)
                 via_stops2.push({
@@ -103,6 +127,14 @@ Page({
                     isthis: false
                 })
             }
+            //第一程路线的第一个站点为用户点击的站点
+            via_stops.unshift({
+                index: 1,
+                via_stops: stopname,
+                longitude: parseFloat(stoplocation.split(',')[0]),
+                latitude: parseFloat(stoplocation.split(',')[1]),
+                isthis: false
+            })
             //第二程路线的第一个站点
             via_stops2.unshift({
                 index: 1,
@@ -110,6 +142,14 @@ Page({
                 longitude: parseFloat(stoplocation2.split(',')[0]),
                 latitude: parseFloat(stoplocation2.split(',')[1]),
                 isthis: false
+            })
+            //第一程终点下车
+            via_stops.push({
+                index: via_stops.length + 1,
+                via_stops: arrival_stop_name + '要下车啦',
+                longitude: parseFloat(arrival_stop.split(',')[0]),
+                latitude: parseFloat(arrival_stop.split(',')[1]),
+                isthat: true
             })
             //第二程终点下车
             via_stops2.push({
@@ -119,24 +159,115 @@ Page({
                 latitude: parseFloat(arrival_stop2.split(',')[1]),
                 isthat: true
             })
+
+        } else if (istransfer0 == 0 && istransfer1 > 0 && istransfer2 > 0) {
+            //第一程途径站点坐标处理
+            for (var i = 0; i < viastop.length; i++) {
+                console.log(viastop[i].name + '/' + viastop[i].location)
+                via_stops.push({
+                    index: i + 2,
+                    via_stops: viastop[i].name,
+                    longitude: parseFloat(viastop[i].location.split(',')[0]),
+                    latitude: parseFloat(viastop[i].location.split(',')[1]),
+                    isthis: false
+                })
+            }
+            for (var j = 0; j < viastop2.length; j++) {
+                console.log(viastop2[j].name + '/' + viastop2[j].location)
+                via_stops2.push({
+                    index: j + 2,
+                    via_stops: viastop2[j].name,
+                    longitude: parseFloat(viastop2[j].location.split(',')[0]),
+                    latitude: parseFloat(viastop2[j].location.split(',')[1]),
+                    isthis: false
+                })
+            }
+            for (var j = 0; j < viastop3.length; j++) {
+                console.log(viastop3[j].name + '/' + viastop3[j].location)
+                via_stops3.push({
+                    index: j + 2,
+                    via_stops: viastop3[j].name,
+                    longitude: parseFloat(viastop3[j].location.split(',')[0]),
+                    latitude: parseFloat(viastop3[j].location.split(',')[1]),
+                    isthis: false
+                })
+            }
+            //第一程路线的第一个站点为用户点击的站点
+            via_stops.unshift({
+                index: 1,
+                via_stops: stopname,
+                longitude: parseFloat(stoplocation.split(',')[0]),
+                latitude: parseFloat(stoplocation.split(',')[1]),
+                isthis: false
+            })
+            //第二程路线的第一个站点
+            via_stops2.unshift({
+                index: 1,
+                via_stops: stoplocation_name2,
+                longitude: parseFloat(stoplocation2.split(',')[0]),
+                latitude: parseFloat(stoplocation2.split(',')[1]),
+                isthis: false
+            })
+            via_stops3.unshift({
+                index: 1,
+                via_stops: stoplocation_name3,
+                longitude: parseFloat(stoplocation3.split(',')[0]),
+                latitude: parseFloat(stoplocation3.split(',')[1]),
+                isthis: false
+            })
+            //第一程终点下车
+            via_stops.push({
+                index: via_stops.length + 1,
+                via_stops: arrival_stop_name + '要下车啦',
+                longitude: parseFloat(arrival_stop.split(',')[0]),
+                latitude: parseFloat(arrival_stop.split(',')[1]),
+                isthat: true
+            })
+            //第二程终点下车
+            via_stops2.push({
+                index: via_stops2.length + 1,
+                via_stops: arrival_stop_name2 + '要下车啦',
+                longitude: parseFloat(arrival_stop2.split(',')[0]),
+                latitude: parseFloat(arrival_stop2.split(',')[1]),
+                isthat: true
+            })
+            via_stops3.push({
+                index: via_stops3.length + 1,
+                via_stops: arrival_stop_name3 + '要下车啦',
+                longitude: parseFloat(arrival_stop3.split(',')[0]),
+                latitude: parseFloat(arrival_stop3.split(',')[1]),
+                isthat: true
+            })
+        } else if (istransfer0 == 0 && istransfer1 == 0 && istransfer2 == 0) {
+            //第一程途径站点坐标处理
+            for (var i = 0; i < viastop.length; i++) {
+                console.log(viastop[i].name + '/' + viastop[i].location)
+                via_stops.push({
+                    index: i + 2,
+                    via_stops: viastop[i].name,
+                    longitude: parseFloat(viastop[i].location.split(',')[0]),
+                    latitude: parseFloat(viastop[i].location.split(',')[1]),
+                    isthis: false
+                })
+            }
+            //第一程路线的第一个站点为用户点击的站点
+            via_stops.unshift({
+                index: 1,
+                via_stops: stopname,
+                longitude: parseFloat(stoplocation.split(',')[0]),
+                latitude: parseFloat(stoplocation.split(',')[1]),
+                isthis: false
+            })
+            //第一程终点下车
+            via_stops.push({
+                index: via_stops.length + 1,
+                via_stops: stoplocation_name + '要下车啦',
+                longitude: parseFloat(destination_location.split(',')[0]),
+                latitude: parseFloat(destination_location.split(',')[1]),
+                isthat: true
+            })
+
         }
-        //第一程路线的第一个站点为用户点击的站点
-        via_stops.unshift({
-            index: 1,
-            via_stops: stopname,
-            longitude: parseFloat(stoplocation.split(',')[0]),
-            latitude: parseFloat(stoplocation.split(',')[1]),
-            isthis: false
-        })
-        //第一程终点下车
-        via_stops.push({
-            index: via_stops.length + 1,
-            via_stops: arrival_stop_name + '要下车啦',
-            longitude: parseFloat(arrival_stop.split(',')[0]),
-            latitude: parseFloat(arrival_stop.split(',')[1]),
-            isthat: true
-        })
-        console.log(via_stops)
         //获取用户实时位置改变
         wx.startLocationUpdateBackground({
             success: (res) => {
@@ -183,33 +314,22 @@ Page({
                         // console.log( via_stops[i].latitude+','+ via_stops[i].longitude)
                         console.log(action1_dis)
                         if (action1_dis < 10) {
+                            for (var j = 1; j < via_stops.length - 2; j++) {
+                                via_stops[j].isthis = false
+                            }
                             via_stops[i].isthis = true
                             console.log(Boolean(via_stops[i].isthis))
                             console.log('播报到站提醒')
-                            if (that.data.falg) {
+                            var flag1 = that.data.judge1[i]
+                            if (flag1) {
                                 show.unshift({
                                     id: 0,
-                                    voice: via_stops[i].via_stops + '到了，请叔叔阿姨做好下车准备哦！'
+                                    voice: via_stops[i].via_stops + '到了，请做好下车准备哦！'
                                 })
                                 that.setData({
-                                    falg: false,
+                                    ['judge1' + '[' + i + ']']: !flag1,
                                     voice: show[0].voice,
                                     rount_item_change: 'rount_item_change'
-                                })
-                                console.log(that.data.voice)
-                            } else {
-                                continue
-                            }
-                        } else if (action1_dis > 10) {
-                            console.log('播报下一站')
-                            if (!that.data.falg) {
-                                show.unshift({
-                                    id: 0,
-                                    voice: '下一站' + via_stops[i + 1].via_stops
-                                })
-                                that.setData({
-                                    falg: true,
-                                    voice: show[0].voice,
                                 })
                                 console.log(that.data.voice)
                             } else {
@@ -238,22 +358,26 @@ Page({
                         }
                     }
                     //当前位置与第二程站牌距离逻辑
-                    if (istransfer > 0) {
+                    if (istransfer0 == 0 && istransfer1 > 0 && istransfer2 == 0) {
                         for (var i = 0; i < via_stops2.length - 1; i++) {
                             var action1_dis = distance(res.latitude, res.longitude, via_stops2[i].latitude, via_stops2[i].longitude)
                             // console.log( via_stops[i].latitude+','+ via_stops[i].longitude)
                             console.log(action1_dis)
                             if (action1_dis < 10) {
+                                for (var j = 1; j < via_stops.length - 2; j++) {
+                                    via_stops[j].isthis = false
+                                }
                                 via_stops2[i].isthis = true
                                 console.log(Boolean(via_stops2[i].isthis))
                                 console.log('播报到站提醒')
-                                if (that.data.falg) {
+                                var flag1 = that.data.judge2[i]
+                                if (flag1) {
                                     show.unshift({
                                         id: 0,
-                                        voice: via_stops2[i].via_stops + '就要到了，请叔叔阿姨做好下车准备哦！'
+                                        voice: via_stops2[i].via_stops + '就要到了，请做好下车准备哦！'
                                     })
                                     that.setData({
-                                        falg: false,
+                                        ['judge2' + '[' + i + ']']: !flag1,
                                         voice: show[0].voice,
                                         rount_item_change: 'rount_item_change',
                                         hidden: false
@@ -262,16 +386,53 @@ Page({
                                 } else {
                                     continue
                                 }
-                            } else if (action1_dis > 10) {
-                                console.log('播报下一站')
-                                if (!that.data.falg) {
+                            }
+                            var content = that.data.voice;
+                            if (that.data.voiceup) {
+                                plugin.textToSpeech({
+                                    lang: "zh_CN",
+                                    tts: true,
+                                    content: content,
+                                    success: function (res) {
+                                        console.log(res);
+                                        console.log("succ tts", res.filename);
+                                        that.setData({
+                                            src: res.filename
+                                        })
+                                        that.yuyinPlay();
+
+                                    },
+                                    fail: function (res) {
+                                        console.log("fail tts", res)
+                                    }
+                                })
+                            }
+                        }
+                    }
+                    //当前位置与第三程站牌距离逻辑
+                    if (istransfer0 == 0 && istransfer1 > 0 && istransfer2 > 0) {
+                        for (var i = 0; i < via_stops3.length - 1; i++) {
+                            var action1_dis = distance(res.latitude, res.longitude, via_stops3[i].latitude, via_stops3[i].longitude)
+                            // console.log( via_stops[i].latitude+','+ via_stops[i].longitude)
+                            console.log(action1_dis)
+                            if (action1_dis < 10) {
+                                for (var j = 1; j < via_stops.length - 2; j++) {
+                                    via_stops[j].isthis = false
+                                }
+                                via_stops3[i].isthis = true
+                                console.log(Boolean(via_stops3[i].isthis))
+                                console.log('播报到站提醒')
+                                var flag1 = that.data.judge3[i]
+                                if (flag1) {
                                     show.unshift({
                                         id: 0,
-                                        voice: '下一站' + via_stops2[i + 1].via_stops
+                                        voice: via_stops3[i].via_stops + '就要到了，请做好下车准备哦！'
                                     })
                                     that.setData({
-                                        falg: false,
+                                        ['judge3' + '[' + i + ']']: !flag1,
                                         voice: show[0].voice,
+                                        rount_item_change: 'rount_item_change',
+                                        hidden: false
                                     })
                                     console.log(that.data.voice)
                                 } else {
@@ -306,27 +467,38 @@ Page({
                         stopdetail: stopde,
                         polyline: [{
                             points: points,
-                            color: "#0091ff",
-                            width: 6
+                            color: "#0066FF",
+                            width: 6,
+                            arrowLine: true
                         }],
                         busname: busname,
                         busname2: busname2,
+                        busname3: busname3,
                         viastops: via_stops,
                         viastops2: via_stops2,
+                        viastops3: via_stops3,
                         steps: steps,
                         steps2: steps2,
+                        steps3: steps3,
                         origin_location: origin_location,
                         origin_location2: origin_location2,
+                        origin_location3: origin_location3,
                         destination_location: destination_location,
                         destination_location2: destination_location2,
+                        destination_location3: destination_location3,
                         stopname: stopname,
                         stopname2: stopname2,
+                        stopname3: stopname3,
                         stoplocation: stoplocation,
                         stoplocation2: stoplocation2,
+                        stoplocation3: stoplocation3,
                         re_lat: res.latitude,
                         re_lon: res.longitude,
                         walkdis2: walkdis2,
-                        istransfer: istransfer,
+                        walkdis3: walkdis3,
+                        istransfer0: istransfer0,
+                        istransfer1: istransfer1,
+                        istransfer2: istransfer2,
                         rount_item_bottom_change: 'rount_item_bottom_change'
                     })
                 })
@@ -456,6 +628,36 @@ Page({
             //console.log(steps)
         }, function () {})
     },
+    //中转方案2
+    transfer2() {
+        var that = this
+        var stop_lat3 = that.data.stoplocation3.split(',')[0]
+        var stop_lon3 = that.data.stoplocation3.split(',')[1]
+        var or_lat3 = that.data.origin_location3.split(',')[0]
+        var or_lon3 = that.data.origin_location3.split(',')[1]
+        var stop_name = that.data.stopname3
+        //获取高德地图步行方案
+        const promise = new Promise(function (resolve, reject) {
+            wx.request({
+                url: "https://restapi.amap.com/v3/direction/walking?origin=" + or_lon3 + "," + or_lat3 + "&destination=" + stop_lon3 + "," + stop_lat3 + "&city=佛山&output=json&key=83435cf7e1f8e7b06c1d9a5353e94c06",
+                success: function (res) {
+                    resolve(res)
+                },
+                fail: () => {
+                    reject("系统异常，请重试！")
+                }
+            })
+        })
+        promise.then(function (res) {
+            console.log(res)
+            console.log(that.data.steps3)
+            var steps3 = JSON.stringify(that.data.steps3);
+            wx.navigateTo({
+                url: '../../pages/walk/walk?stop_lat=' + stop_lat3 + '&stop_lon=' + stop_lon3 + '&stop_name=' + stop_name + '&now_lat=' + that.data.re_lat + '&now_lon=' + that.data.re_lon + '&steps=' + steps3,
+            })
+            //console.log(steps)
+        }, function () {})
+    },
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
@@ -494,10 +696,6 @@ Page({
      * 生命周期函数--监听页面卸载
      */
     onUnload: function () {
-        //重新加载页面
-        this.onLoad();
-        //关闭页面暂停语音
-        this.innerAudioContext.pause(); //暂停音频
     },
 
     /**

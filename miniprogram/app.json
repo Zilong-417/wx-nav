@@ -1,11 +1,11 @@
 {
   "pages": [
+    
     "pages/trip/trip",
     "pages/busdetail/busdetail",
     "pages/walk/walk",
-    "pages/buslist/buslist"
-    
-
+    "pages/buslist/buslist",
+    "pages/cart/cart"
   ],
   "window": {
     "backgroundColor": "#7bbfea",

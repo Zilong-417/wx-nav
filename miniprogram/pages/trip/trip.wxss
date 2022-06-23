@@ -1,7 +1,7 @@
 /* pages/trip/trip.wxss */
 /*顶端提示*/
 page {
-    background-color: #F5F5F5;
+    background-color: white;
     width: 100%;
     height: 100%;
 }
@@ -30,6 +30,7 @@ page {
     margin: 0 auto;
     overflow: hidden;
     transform: translateY(0);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .map_change {
@@ -74,7 +75,43 @@ page {
     font-size: 21px;
     font-weight: 600;
 }
-
+/*输入框文字放大提示*/
+.large_text{
+    position: absolute;
+    display: none;
+    bottom: 20%;
+    left: 5%;
+    width: 90%;
+    height: 15%;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    z-index: 10;
+}
+.large_text text{
+    display: inline-block;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 30px;
+    height: 100%;
+    color:	#888888;
+    background-color:#F5F5F5;
+    border: 1px solid #DCDCDC;
+}
+.triangle-down {
+    position: absolute;
+    bottom: 17%;
+    left: 7%;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 19px solid 	#F5F5F5;
+    z-index: 15;
+}
 /*搜索栏*/
 .search_nav {
     text-overflow: ellipsis;
@@ -87,6 +124,7 @@ page {
     height: 25%;
     border-radius: 15rpx;
     background-color: white;
+
 }
 
 .search_nav_none {
@@ -128,12 +166,15 @@ page {
     top: 30%;
     width: 78%;
     height: 30px;
+    line-height: 30px;
     font-size: larger;
     padding: 10px 30px;
     border-radius: 15rpx;
     border: 1px solid #DCDCDC;
     background-color: #F5F5F5;
     margin-top: 10px;
+    display: flex;
+    align-items: center;
 }
 
 /*站点详情*/
@@ -163,6 +204,7 @@ page {
 }
 
 .stop_detail_item {
+
     width: 100%;
     height: 100%;
     display: inline-block;
@@ -236,8 +278,15 @@ page {
 
 .sub .sub_btn {
     float: left;
-    width: 47%;
+    width: 45%;
     background-color: #32CD32;
+    color: #F5F5F5;
+    font-size: larger;
+    border-radius: 100rpx;
+    line-height: 70rpx;
+    text-align: center;
+    text-shadow: 1px 1px 1px rgba(255, 255, 255, .1);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 /*底部栏*/
@@ -247,6 +296,8 @@ page {
     height: 15%;
     border-top: 1px solid #ccc;
     position: relative;
+    bottom: 0;
+    left: 0;
     background-color: white;
 }
 
@@ -341,4 +392,71 @@ page {
     z-index: 10;
     background: transparent;
     transform: translate(-50%, -50%);
+}
+
+/*出行方式选择*/
+.trip_chose {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    background-color: rgba(0, 0, 0, .5);
+    z-index: 50;
+    top: 0;
+    left: 0;
+}
+
+.trip_chose_in {
+    position: absolute;
+    left: 5%;
+    bottom: 32%;
+    width: 90%;
+    height: 30%;
+    background: #FFFFFF;
+    border-radius: 20rpx;
+    overflow: hidden;
+}
+.chose_text{
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: larger;
+    font-weight: 600;
+    letter-spacing: 4px;
+    border-bottom: 1px solid #ccc;
+    background-color: #7bbfea;
+}
+.chose_text image{
+    position: absolute;
+    right: 2%;
+    width: 40px;
+    height: 40px;
+}
+.chose_bottom{
+    width: 100%;
+    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.chose_bottom .chose_left{
+    float: left;
+    width: 45%;
+    height: 85%;
+    border-radius: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.chose_left image{
+    width: 50px;
+    height: 50px;
+}
+.chose_left text{
+   font-size: 20px;
+   padding-left: 5px;
 }

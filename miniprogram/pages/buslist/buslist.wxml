@@ -2,30 +2,34 @@
 <view class="nav">
     <view class="to_address">开往<text>{{goods}}</text>方向的公交</view>
 </view>
-<block wx:for="{{stops}}" >
+<block wx:for="{{stops}}">
     <view class="stop_box" bindtap="gobusdetail" data-busname="{{item.busname}}" data-sumtime="{{item.sum_time}}" data-cost="{{item.cost}}">
-        <view class="stop_box_left"  wx:if="{{item.istransfer==0}}">
+        <view class="stop_box_left" wx:if="{{item.istransfer0==0&&item.istransfer1==0&&item.istransfer2==0}}">
             <text>{{item.cost}}元</text>
-            <text class="go"  wx:if="{{item.istransfer==0}}">直达</text>
+            <text class="go" wx:if="{{item.istransfer0==0&&item.istransfer1==0&&item.istransfer2==0}}">直达</text>
         </view>
-        <view class="stop_box_left {{stop_box_left_change}}" wx:if="{{item.istransfer>0}}">
+        <view class="stop_box_left {{stop_box_left_change}}" wx:if="{{item.istransfer1>0||item.istransfer2>0}}">
             <text>{{item.cost}}元</text>
-            <text class="go"  wx:if="{{item.istransfer>0}}">换乘</text>
+            <text class="go" wx:if="{{item.istransfer1>0||item.istransfer2>0}}">换乘</text>
         </view>
         <view class="stop_box_right">
             <view class="address">
                 <image src="../../images/circle1.png"></image>
-                <text>{{item.stopname}}上车</text>
+                <text>{{item.stopname}}</text>
             </view>
             <view class="address">
-                <image src="../../images/bystop.png"></image>
-                <text class="busname">{{item.busname}}</text>
-                <image src="../../images/right_jt.png "  wx:if="{{item.istransfer>0}}"></image>
-                <text class="busname"  wx:if="{{item.istransfer>0}}">{{item.busname2}}</text>
+                <image src="../../images/bystop.png" style="float: left;"></image>
+                <scroll-view class="stop_list" scroll-x="{{true}}">
+                    <text class="busname">{{item.busname}}</text>
+                    <image src="../../images/right_jt.png " wx:if="{{item.istransfer1>0||item.istransfer2>0}}"></image>
+                    <text class="busname" wx:if="{{item.istransfer1>0||item.istransfer2>0}}">{{item.busname2}}</text>
+                    <image src="../../images/right_jt.png " wx:if="{{item.istransfer2>0}}"></image>
+                    <text class="busname" wx:if="{{item.istransfer2>0}}">{{item.busname3}}</text>
+                </scroll-view>
             </view>
             <view class="ways">
                 <text>步行:{{item.walk_dis}}米</text>
-                <text>车程:{{item.sum_time}}小时</text>
+                <text style="margin-left: 2px;">车程:{{item.sum_time}}小时</text>
             </view>
         </view>
     </view>

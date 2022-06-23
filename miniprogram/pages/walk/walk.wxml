@@ -6,7 +6,7 @@
     </view>
 </view>
 <view class="map_box">
-    <map id="map" markers="{{markers}}" scale="{{scale_change==true?20:17}}" show-compass="true" show-location="true" enable-rotate="true" enable-building="true" layer-style="1" latitude="{{ markers[0].latitude}}" longitude="{{ markers[0].longitude}}" polyline="{{polyline}}">
+    <map id="map" markers="{{markers}}" scale="{{scale_change==true?20:18}}" show-compass="true" enable-rotate="true" enable-building="true" layer-style="1" latitude="{{markers[0].latitude}}" longitude="{{markers[0].longitude}}" polyline="{{polyline}}" show-location="{{true}}">
         <!--路线报点-->
         <view class="road">
             <view class="sound" bindtap="wordYun">

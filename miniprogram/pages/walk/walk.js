@@ -19,8 +19,6 @@ Page({
         src: '',
         show_nowaction: [],
         falg1: true,
-        falg2: true,
-        falg3: true,
         judge:utils.flag(50)
     },
 
@@ -29,6 +27,7 @@ Page({
      */
     onLoad: function (options) {
         console.log(options)
+        console.log(getCurrentPages())
         var that = this
         var steps = JSON.parse(options.steps) //行走路线
         console.log(steps)
@@ -38,44 +37,23 @@ Page({
         var show1 = []
         //终点
         mark.push({
-            id: 1,
+            markerId: 1,
             title: '终点',
             latitude: options.stop_lat,
             longitude: options.stop_lon,
             iconPath: "../../images/to.png",
             width: 40,
             height: 40,
-            callout: {
-                content: "终点",
-                color: '#0000ff',
-                fontSize: 20,
-                borderRadius: 5,
-                borderWidth: 1,
-                borderColor: '#0000ff',
-                padding: 2,
-                display: 'ALWAYS'
-            }
-
         })
         //起点
         mark.push({
-            id: 2,
+            markerId: 2,
             title: '起点',
             latitude: options.now_lat,
             longitude: options.now_lon,
             iconPath: "../../images/from.png",
             width: 40,
-            height: 40,
-            callout: {
-                content: "起点",
-                color: '#0000ff',
-                fontSize: 20,
-                borderRadius: 5,
-                borderWidth: 1,
-                borderColor: '#0000ff',
-                padding: 2,
-                display: 'ALWAYS'
-            }
+            height: 40
         })
         //行走路线点报点
         for (var i = 0; i < steps.length; i++) {
@@ -89,7 +67,6 @@ Page({
                 action: action,
                 action1_location: po_Len[0],
                 action2_location: po_Len[po_Len.length - 1],
-
             })
             console.log(step_way);
             that.setData({
@@ -129,11 +106,26 @@ Page({
                     console.log(res)
                     var that = this
                     console.log(res.latitude + '/' + res.longitude)
+                    // this.mapCtx.translateMarker({
+                    //     markerId: 0,
+                    //     destination: {
+                    //         latitude:options.stop_lat,
+                    //         longitude: options.stop_lon
+                    //     },
+                    //     rotate: 40,
+                        
+                    //     success: res => {
+                    //         console.log('translateMarker success');
+                    //     },
+                    //     fail: err => {
+                    //         console.log('translateMarker fail', err);
+                    //     }
+                    // })
                     mark.unshift({
-                        id: 0,
+                        markerId: 0,
                         title: '当前位置',
-                        latitude: String(res.latitude),
-                        longitude: String(res.longitude)
+                        latitude: res.latitude,
+                        longitude: res.longitude
                     })
                     mark.splice(0, mark.length - 3)
                     console.log(mark)
@@ -153,7 +145,7 @@ Page({
                         console.log('离标志点2:' + action2_dis)
                         var action3_dis = distance(action1_lat, action1_lon, action2_lat, action2_lon)
                         console.log('报点两点距离:' + action3_dis)
-                        if (action1_dis <action3_dis/2) {
+                        if (action1_dis <5) {
                             var that = this
                             //console.log('falg3' + that.data.falg3)
                             var flag1=that.data.judge[i]
@@ -170,7 +162,7 @@ Page({
                             } else {
                                 continue
                             }
-                        }else {
+                        }else{
                             var that = this
                             console.log('falg1' + that.data.falg1)
                             if (that.data.falg1) {
@@ -211,8 +203,9 @@ Page({
                         markers: mark,
                         polyline: [{
                             points: points,
-                            color: "#0091ff",
-                            width: 6
+                            color: "#0066FF",
+                            width: 6,
+                            arrowLine:true
                         }],
                         steps: steps,
                         stop_name: options.stop_name
@@ -249,7 +242,6 @@ Page({
                 })
             }
         })
-
     },
     //地图放大
     big() {
@@ -299,6 +291,7 @@ Page({
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady: function (res) {
+        //this.mapCtx = wx.createMapContext('map')
         //创建内部 audio 上下文 InnerAudioContext 对象。
         this.innerAudioContext = wx.createInnerAudioContext();
         this.innerAudioContext.onError(function (res) {

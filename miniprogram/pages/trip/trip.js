@@ -3,6 +3,7 @@ var app = getApp();
 //获取录音管理器对象
 var rm = wx.getRecorderManager();
 var plugin = requirePlugin("WechatSI")
+// 获取**全局唯一**的语音识别管理器**recordRecoManager**
 let manager = plugin.getRecordRecognitionManager()
 // 引入SDK核心类
 var QQMapWX = require('../../lib/qqmap-wx-jssdk');
@@ -28,37 +29,51 @@ Page({
     //是否被放大
     isbig: true,
     words: [],
-    toViewid: "v0"
+    toViewid: "v0",
+    //出行方式默认隐藏
+    hidden: false
   },
   //生命周期函数--监听页面加载
   onLoad: function (_options) {
+    console.log(getCurrentPages())
     // 实例化API核心类
     qqmapsdk = new QQMapWX({
       key: 'VDUBZ-LMOEX-Y7J4V-TIIKL-U2H62-JLFGY'
     });
     //录音
     var that = this;
+    console.log(that.data.addtext)
+    //有新的识别内容返回，则会调用此事件
     manager.onRecognize = function (res) {
-      cons.log("current result", res.result)
+      console.log("current result", res.result)
     }
     manager.onStop = function (res) {
       console.log('识别开始');
       var result = res.result;
-      var s = result.indexOf('。') //找到第一次出现下划线的位置
-      result = result.substring(0, s) //取下划线前的字符
-      var searchType = that.data.searchType;
-      that.setData({
-        addtext: result
-      })
-      wx.showToast({
-        title: result,
-      })
+      if (result == '') {
+        wx.showToast({
+          icon: 'error',
+          title: '没听清！'
+        })
+      } else {
+        var s = result.indexOf('。') //找到第一次出现下划线的位置
+        result = result.substring(0, s) //取下划线前的字符
+        var searchType = that.data.searchType;
+        that.setData({
+          addtext: result
+        })
+        wx.showToast({
+          title: result,
+        })
+      }
     }
+    //识别错误事件
     manager.onError = function (res) {
       console.log('manager.onError')
       console.log(res) //报错信息打印
       wx.showToast({
-        title: res.msg,
+        title: '识别失败！',
+        icon: 'error',
       })
       // UTIL.log("error msg", res.msg)
     }
@@ -86,16 +101,16 @@ Page({
                   latitude: lat,
                   longitude: lon,
                   iconPath: "../../images/from.png",
-                  width: 40,
-                  height: 40,
+                  width: 37,
+                  height: 37,
                   callout: {
                     content: "当前位置",
                     color: '#0000ff',
-                    fontSize: 20,
+                    fontSize: 15,
                     borderRadius: 5,
-                    borderWidth: 1,
-                    borderColor: '#0000ff',
-                    padding: 2,
+                    borderWidth: 2,
+                    borderColor: '#DDDDDD',
+                    padding: 5,
                     display: 'ALWAYS'
                   }
                 }]
@@ -123,7 +138,7 @@ Page({
       }
     });
   },
-  //长按录音开始
+  //长按按钮录音开始
   recordStart: function (e) {
     var that = this
     // UTIL.stopTTS();
@@ -148,8 +163,9 @@ Page({
         })));
     }, 10);
   },
-  //长按录音结束
+  //松开按钮录音结束
   recordTerm: function (e) {
+    console.log(e)
     //结束录音
     var searchType = e.currentTarget.dataset.type;
     this.setData({
@@ -161,19 +177,20 @@ Page({
       searchType: searchType,
       background: "#ED6C00",
       yysb: "长按语音识别"
-    }), clearInterval(this.timer);;
+    }), clearInterval(this.timer);
+
     manager.stop();
     wx.showToast({
       title: '正在识别……',
       icon: 'loading',
-      duration: 2000
+      duration: 5000
     })
   },
   //放大缩小地图
   big(e) {
     console.log(e)
     var that = this
-    if(that.data.isbig==false){
+    if (that.data.isbig == false) {
       that.onLoad()
     }
     console.log(that.data.isbig)
@@ -215,16 +232,16 @@ Page({
             longitude: res.data[i].location.lng,
             latitude: res.data[i].location.lat,
             distance: this.getDistance(that.data.lat, that.data.lon, res.data[i].location.lat, res.data[i].location.lng),
-            width: 40,
-            height: 40,
+            width: 38,
+            height: 38,
             callout: {
               content: res.data[i].title,
               color: '#0000ff',
               fontSize: 15,
               borderRadius: 5,
-              borderWidth: 1,
-              borderColor: '#0000ff',
-              padding: 2,
+              borderWidth: 2,
+              borderColor: '#DDDDDD',
+              padding: 5,
               display: 'ALWAYS'
             }
           })
@@ -242,11 +259,11 @@ Page({
           callout: {
             content: "当前位置",
             color: '#FF0000',
-            fontSize: 20,
+            fontSize: 18,
             borderRadius: 5,
-            borderWidth: 1,
-            borderColor: '#FF8C00',
-            padding: 2,
+            borderWidth: 2,
+            borderColor: '#DDDDDD',
+            padding: 5,
             display: 'ALWAYS'
           }
         })
@@ -272,11 +289,11 @@ Page({
             voice_box_none: '',
             stop_detail_none: 'stop_detail_none'
           })
-          
+
         }
       }
     })
-    
+
   },
   //点击地点气泡事件
   bindshow(e) {
@@ -297,10 +314,45 @@ Page({
       'addtext': e.detail.value
     })
   },
-  //前往目的地
+  //目的地方式选择
   goaddress: function (e) {
     var that = this
+    that.setData({
+      hidden: !that.data.hidden
+    })
+  },
+  //关闭出行选择窗口
+  candel_chose() {
+    var that = this
+    that.setData({
+      hidden: !that.data.hidden
+    })
+  },
+  //获取输入框焦点
+  inputfouse(e) {
+    var that = this
+    that.setData({
+      bindfocus: true
+    })
+  },
+  //失去输入框焦点
+  inputblur(e) {
+    var that = this
+    that.setData({
+      bindfocus: false
+    })
+  },
+  //公交出行(不可跨城市)
+  gobus(e) {
+    var that = this
     console.log(e)
+    if (that.data.addtext == null || that.data.addtext == '') {
+      wx.showToast({
+        icon: 'error',
+        title: '地址不能为空',
+      })
+      return false
+    }
     //通过地理位置名字获取经纬度
     qqmapsdk.geocoder({
       //获取表单传入地址
@@ -328,14 +380,54 @@ Page({
         }, function () {})
       }
     })
+    this.setData({
+      hidden: !this.data.hidden
+    })
+  },
+  //自驾出行(可跨城市)
+  gocart(e) {
+    var that = this
+    console.log(e)
+    //通过地理位置名字获取经纬度
+    qqmapsdk.geocoder({
+      //获取表单传入地址
+      address: that.data.addtext, //地址参数
+      success: function (res) { //成功后的回调
+        console.log(res)
+        //获取高德地图自驾出行方案
+        const promise = new Promise(function (resolve, reject) {
+          wx.request({
+            url: "https://restapi.amap.com/v3/direction/driving?origin=" + that.data.lon + "," + that.data.lat + "&destination=" + res.result.location.lng + "," + res.result.location.lat + "&extensions=all&output=json&key=83435cf7e1f8e7b06c1d9a5353e94c06",
+            success: function (res) {
+              console.log(res)
+              resolve(res)
+            },
+            fail: () => {
+              reject("系统异常，请重试！")
+            }
+          })
+        })
+        promise.then(function (res) {
+          console.log(res.data.route.paths)
+          var paths = JSON.stringify(res.data.route.paths);
+          wx.navigateTo({
+            url: '../../pages/cart/cart?paths=' + paths + '&goods=' + that.data.addtext + '&origin=' + res.data.route.origin + '&destination=' + res.data.route.destination
+          })
+        }, function () {})
+      }
+    })
+    this.setData({
+      hidden: !this.data.hidden
+    })
   },
   //清空内容
   reset: function (e) {
     console.log(e)
-    this.setData({
-      'addtext': ''
-    })
 
+    this.setData({
+      addtext: ''
+    })
+    console.log(this.data.addtext)
   },
   //前往站牌
   gostop: function (e) {
@@ -359,7 +451,7 @@ Page({
     promise.then(function (res) {
       console.log(res)
       var steps = JSON.stringify(res.data.route.paths[0].steps);
-     // console.log(steps)
+      // console.log(steps)
       wx.navigateTo({
         url: '../../pages/walk/walk?stop_lat=' + stop_lat + '&stop_lon=' + stop_lon + '&stop_name=' + stop_name + '&now_lat=' + that.data.lat + '&now_lon=' + that.data.lon + '&steps=' + steps
       })
@@ -466,6 +558,7 @@ Page({
     }, 1500);
   },
   onShow: function () {
+    console.log(getCurrentPages())
   },
   /**
    * 生命周期函数--监听页面卸载

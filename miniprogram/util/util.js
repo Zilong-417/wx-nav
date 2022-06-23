@@ -87,6 +87,7 @@ const formatHour = date => {
   var hour = myDate.getHours();
   return hour
 }
+//步行路线站点flag
 const flag=n=>{
   let judge=[]
   for(let i=0;i<n;i++){
