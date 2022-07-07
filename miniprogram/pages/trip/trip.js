@@ -38,7 +38,7 @@ Page({
     console.log(getCurrentPages())
     // 实例化API核心类
     qqmapsdk = new QQMapWX({
-      key: 'VDUBZ-LMOEX-Y7J4V-TIIKL-U2H62-JLFGY'
+      key: 'XXXXXXXXXXXXXXX'
     });
     //录音
     var that = this;
@@ -524,8 +524,8 @@ Page({
   // 获取百度access_token  
   getBaiduToken: function () {
     return new Promise(resolve => {
-      var APIKEY = "U5DEIIPalSea6L8pjnjegwgc"
-      var SECKEY = "h5xGvGMSPc6TN5ZG69uTy7VlMXiTGKeg"
+      var APIKEY = "XXXXXXXXXXXXXXXX"
+      var SECKEY = "XXXXXXXXXXXXXXXXXXXX"
       var tokenUrl = `https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=${APIKEY}&client_secret=${SECKEY}`
       var that = this;
       wx.request({
